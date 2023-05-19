@@ -1,0 +1,13 @@
+version: "3.3"
+
+services:
+
+  postgres:
+    image: postgres:15.3
+    environment:
+      POSTGRES_HOST: localhost
+      POSTGRES_DB: Messenger
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: usersample
+    ports:
+      - "5432:5432"
