@@ -19,6 +19,6 @@ public class RequestUserDTO {
     private String nickName;
 
     public UserDAO toDAO(){
-        return new UserDAO(null, email, password, nickName);
+        return new UserDAO(null, email, password, nickName, null, null);
     }
 }
