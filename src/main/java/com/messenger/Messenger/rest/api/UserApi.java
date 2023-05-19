@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/users")
 public interface UserApi {
-    @Operation(summary = "Создание студента")
+    @Operation(summary = "Создание пользователя")
     @PostMapping
     ResponseEntity<?> create(@Validated @RequestBody RequestUserDTO requestUserDTO);
+
+    @Operation(summary = "")
+    @GetMapping
+    ResponseEntity<?> getAll();
 }

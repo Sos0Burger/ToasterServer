@@ -9,16 +9,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestUserDTO {
-
+public class ResponseUserDTO {
+    Integer id;
     @Schema(description = "Почта пользователя", example = "email@email.com")
     private String email;
-    @Schema(description = "Пароль пользователя в ЗАШИФРОВАННОМ виде", example = "jfsjfskmf32424k2")
-    private String password;
     @Schema(description = "Отображаемое имя", example = "NAGIBATOR228")
     private String nickName;
-
-    public UserDAO toDAO(){
-        return new UserDAO(null, email, password, nickName);
-    }
 }

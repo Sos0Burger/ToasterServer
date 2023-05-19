@@ -1,5 +1,6 @@
 package com.messenger.Messenger.dao;
 
+import com.messenger.Messenger.dto.ResponseUserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,4 +24,7 @@ public class UserDAO {
     private String password;
     @Column(name = "nickname")
     private String nickname;
+    public ResponseUserDTO toDTO(){
+        return new ResponseUserDTO(id, email, password);
+    }
 }
