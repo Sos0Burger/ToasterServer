@@ -1,9 +1,7 @@
 package com.messenger.Messenger.rest.api;
 
-import com.messenger.Messenger.dto.RequestUserDTO;
+import com.messenger.Messenger.dto.rq.RequestUserDTO;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

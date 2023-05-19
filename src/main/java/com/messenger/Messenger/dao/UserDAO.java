@@ -1,6 +1,6 @@
 package com.messenger.Messenger.dao;
 
-import com.messenger.Messenger.dto.ResponseUserDTO;
+import com.messenger.Messenger.dto.rs.ResponseUserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

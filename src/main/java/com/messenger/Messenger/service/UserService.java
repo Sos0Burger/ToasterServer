@@ -1,7 +1,7 @@
 package com.messenger.Messenger.service;
 
-import com.messenger.Messenger.dto.RequestUserDTO;
-import com.messenger.Messenger.dto.ResponseUserDTO;
+import com.messenger.Messenger.dto.rq.RequestUserDTO;
+import com.messenger.Messenger.dto.rs.ResponseUserDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

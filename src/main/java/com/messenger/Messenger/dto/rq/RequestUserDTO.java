@@ -1,4 +1,4 @@
-package com.messenger.Messenger.dto;
+package com.messenger.Messenger.dto.rq;
 
 import com.messenger.Messenger.dao.UserDAO;
 import io.swagger.v3.oas.annotations.media.Schema;

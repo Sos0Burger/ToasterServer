@@ -1,6 +1,6 @@
 package com.messenger.Messenger.rest.apiImpl;
 
-import com.messenger.Messenger.dto.RequestUserDTO;
+import com.messenger.Messenger.dto.rq.RequestUserDTO;
 import com.messenger.Messenger.rest.api.UserApi;
 import com.messenger.Messenger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.messenger.Messenger.service.impl;
 
 import com.messenger.Messenger.dao.UserDAO;
-import com.messenger.Messenger.dto.RequestUserDTO;
-import com.messenger.Messenger.dto.ResponseUserDTO;
+import com.messenger.Messenger.dto.rq.RequestUserDTO;
+import com.messenger.Messenger.dto.rs.ResponseUserDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
 import com.messenger.Messenger.repository.UserRepository;
 import com.messenger.Messenger.service.UserService;
