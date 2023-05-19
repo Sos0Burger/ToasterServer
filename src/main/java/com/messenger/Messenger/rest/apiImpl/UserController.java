@@ -25,4 +25,9 @@ public class UserController implements UserApi {
     public ResponseEntity<?> getAll() {
         return userService.getAll();
     }
+
+    @Override
+    public ResponseEntity<?> delete(Integer id) {
+        return userService.delete(id);
+    }
 }

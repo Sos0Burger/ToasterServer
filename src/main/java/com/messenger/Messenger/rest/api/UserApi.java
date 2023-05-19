@@ -2,12 +2,11 @@ package com.messenger.Messenger.rest.api;
 
 import com.messenger.Messenger.dto.RequestUserDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/users")
 public interface UserApi {
@@ -15,7 +14,12 @@ public interface UserApi {
     @PostMapping
     ResponseEntity<?> create(@Validated @RequestBody RequestUserDTO requestUserDTO);
 
-    @Operation(summary = "")
+    @Operation(summary = "Получение всех пользователей")
     @GetMapping
     ResponseEntity<?> getAll();
+
+    @Operation(summary = "Удаление пользователя по id")
+    @DeleteMapping("{id}")
+    ResponseEntity<?> delete(@PathVariable(name = "id") Integer id);
+
 }

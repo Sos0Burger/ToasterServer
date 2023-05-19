@@ -2,6 +2,7 @@ package com.messenger.Messenger.dto;
 
 import com.messenger.Messenger.dao.UserDAO;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,14 +12,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RequestUserDTO {
 
+    @NotNull
     @Schema(description = "Почта пользователя", example = "email@email.com")
     private String email;
+    @NotNull
     @Schema(description = "Пароль пользователя в ЗАШИФРОВАННОМ виде", example = "jfsjfskmf32424k2")
     private String password;
+    @NotNull
     @Schema(description = "Отображаемое имя", example = "NAGIBATOR228")
-    private String nickName;
+    private String nickname;
 
     public UserDAO toDAO(){
-        return new UserDAO(null, email, password, nickName, null, null);
+        return new UserDAO(null, email, password, nickname, null, null);
     }
 }
