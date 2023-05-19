@@ -1,11 +1,14 @@
 package com.messenger.Messenger.rest.apiImpl;
 
+import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
 import com.messenger.Messenger.rest.api.UserApi;
 import com.messenger.Messenger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class UserController implements UserApi {
@@ -29,5 +32,20 @@ public class UserController implements UserApi {
     @Override
     public ResponseEntity<?> delete(Integer id) {
         return userService.delete(id);
+    }
+
+    @Override
+    public ResponseEntity<?> auth(RequestAuth auth) {
+        return userService.auth(auth);
+    }
+
+    @Override
+    public ResponseEntity<?> getByIds(List<Integer> ids) {
+        return userService.findByIds(ids);
+    }
+
+    @Override
+    public ResponseEntity<?> sendFriendRequest(Integer senderid, Integer receiverid) {
+        return userService.sendFriendRequest(senderid, receiverid);
     }
 }

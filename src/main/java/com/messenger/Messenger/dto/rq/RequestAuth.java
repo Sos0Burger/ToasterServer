@@ -1,14 +1,13 @@
-package com.messenger.Messenger.exception;
+package com.messenger.Messenger.dto.rq;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
-public class ExceptionMessage {
-    private String message;
+public class RequestAuth {
+    private String email;
+    private String password;
 }

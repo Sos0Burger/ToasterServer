@@ -27,9 +27,13 @@ public class UserDAO {
     @Column(name = "nickname")
     private String nickname;
     @Column(name = "pending")
-    private List<Integer> pendingFriends;
+    private List<Integer> pending;
     @Column(name = "friends")
     private List<Integer> friends;
+    @Column(name = "sent")
+    private List<Integer> sent;
+    @Column(name = "image")
+    private String image;
 
 
     public ResponseUserDTO toDTO(){

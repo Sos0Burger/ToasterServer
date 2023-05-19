@@ -1,6 +1,7 @@
 package com.messenger.Messenger.service.impl;
 
 import com.messenger.Messenger.dao.UserDAO;
+import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
 import com.messenger.Messenger.dto.rs.ResponseUserDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
@@ -49,8 +50,36 @@ public class UserServiceImpl implements UserService {
             userRepository.delete(userRepository.findById(id).get());
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        else {
-            return new ResponseEntity<>(new ExceptionMessage("Пользователя с таким id не существует"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ExceptionMessage("Пользователя с таким id не существует"), HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<?> auth(RequestAuth auth) {
+        var user = userRepository.findByEmail(auth.getEmail());
+        if(!user.isEmpty()){
+            if(user.get(0).getPassword().equals(auth.getPassword())){
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<?> findByIds(List<Integer> ids) {
+        return new ResponseEntity<>(userRepository.findAllById(ids), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> sendFriendRequest(Integer senderid, Integer receiverid) {
+        if(userRepository.existsById(senderid)&& userRepository.existsById(receiverid)){
+            var sender = userRepository.findById(senderid).get();
+            var receiver = userRepository.findById(receiverid).get();
+            sender.getSent().add(receiverid);
+            receiver.getPending().add(senderid);
+            userRepository.save(sender);
+            userRepository.save(receiver);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ExceptionMessage("Такого id не существует"), HttpStatus.OK);
     }
 }

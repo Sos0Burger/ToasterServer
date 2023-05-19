@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,6 +25,6 @@ public class RequestUserDTO {
     private String nickname;
 
     public UserDAO toDAO(){
-        return new UserDAO(null, email, password, nickname, null, null);
+        return new UserDAO(null, email, password, nickname, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null);
     }
 }
