@@ -15,6 +15,6 @@ public interface MessageApi {
     @GetMapping
     ResponseEntity<?> getAll();
     @Operation(summary = "Получить диалог")
-    @GetMapping("/{userid}/{companionid}")
-    ResponseEntity<?> getDialog(@PathVariable("userid") Integer userid, @PathVariable("companionid") Integer companionid);
+    @GetMapping("/{userid}/{companionid}/{page}")
+    ResponseEntity<?> getDialog(@PathVariable("userid") Integer userid, @PathVariable("companionid") Integer companionid, @PathVariable("page")Integer page);
 }

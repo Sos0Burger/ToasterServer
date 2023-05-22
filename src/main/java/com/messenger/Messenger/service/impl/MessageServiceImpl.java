@@ -8,6 +8,7 @@ import com.messenger.Messenger.repository.MessageRepository;
 import com.messenger.Messenger.repository.UserRepository;
 import com.messenger.Messenger.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -45,14 +46,14 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public ResponseEntity<?> getDialog(Integer userid, Integer companionid) {
+    public ResponseEntity<?> getDialog(Integer userid, Integer companionid, Pageable pageable) {
         if(userRepository.existsById(userid)&&userRepository.existsById(companionid)){
             var user = userRepository.findById(userid).get();
             var companion = userRepository.findById(companionid).get();
             List<MessageDAO> messageDAOS = new ArrayList<>();
             //находим все сообщение между ними
-            messageDAOS.addAll(messageRepository.findBySenderAndReceiver(user, companion));
-            messageDAOS.addAll(messageRepository.findBySenderAndReceiver(companion, user));
+            messageDAOS.addAll(messageRepository.findBySenderAndReceiver(user, companion, pageable).getContent());
+            messageDAOS.addAll(messageRepository.findBySenderAndReceiver(companion, user, pageable).getContent());
 
             List<ResponseMessageDTO> messageDTOS = new ArrayList<>();
             for (MessageDAO message:messageDAOS

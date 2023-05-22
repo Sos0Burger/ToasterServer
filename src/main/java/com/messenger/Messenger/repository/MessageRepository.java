@@ -2,10 +2,10 @@ package com.messenger.Messenger.repository;
 
 import com.messenger.Messenger.dao.MessageDAO;
 import com.messenger.Messenger.dao.UserDAO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
 public interface MessageRepository extends JpaRepository<MessageDAO, Integer> {
-    List<MessageDAO> findBySenderAndReceiver(UserDAO sender, UserDAO receiver);
+    Page<MessageDAO> findBySenderAndReceiver(UserDAO sender, UserDAO receiver, Pageable pageable);
 }
