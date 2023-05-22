@@ -48,4 +48,9 @@ public class UserController implements UserApi {
     public ResponseEntity<?> sendFriendRequest(Integer senderid, Integer receiverid) {
         return userService.sendFriendRequest(senderid, receiverid);
     }
+
+    @Override
+    public ResponseEntity<?> acceptFriendRequest(Integer receiverid, Integer senderid) {
+        return userService.acceptFriendRequest(receiverid, senderid);
+    }
 }

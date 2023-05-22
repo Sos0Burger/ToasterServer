@@ -23,10 +23,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> create(RequestUserDTO requestUserDTO) {
-        if(!userRepository.findByEmail(requestUserDTO.getEmail()).isEmpty()){
+        if (!userRepository.findByEmail(requestUserDTO.getEmail()).isEmpty()) {
             return new ResponseEntity<>(new ExceptionMessage("Пользователь с такой почтой уже существует"), HttpStatus.CONFLICT);
         }
-        if(!userRepository.findByNickname(requestUserDTO.getNickname()).isEmpty()){
+        if (!userRepository.findByNickname(requestUserDTO.getNickname()).isEmpty()) {
             return new ResponseEntity<>(new ExceptionMessage("Пользователь с таким именем уже существует"), HttpStatus.CONFLICT);
         }
         userRepository.save(requestUserDTO.toDAO());
@@ -37,8 +37,8 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<List<ResponseUserDTO>> getAll() {
         List<UserDAO> DAOlist = userRepository.findAll();
         List<ResponseUserDTO> DTOlist = new ArrayList<>();
-        for (UserDAO user:DAOlist
-             ) {
+        for (UserDAO user : DAOlist
+        ) {
             DTOlist.add(user.toDTO());
         }
         return new ResponseEntity<>(DTOlist, HttpStatus.OK);
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> delete(Integer id) {
-        if(userRepository.findById(id).isPresent()){
+        if (userRepository.findById(id).isPresent()) {
             userRepository.delete(userRepository.findById(id).get());
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -56,8 +56,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> auth(RequestAuth auth) {
         var user = userRepository.findByEmail(auth.getEmail());
-        if(!user.isEmpty()){
-            if(user.get(0).getPassword().equals(auth.getPassword())){
+        if (!user.isEmpty()) {
+            if (user.get(0).getPassword().equals(auth.getPassword())) {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
         }
@@ -71,15 +71,51 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> sendFriendRequest(Integer senderid, Integer receiverid) {
-        if(userRepository.existsById(senderid)&& userRepository.existsById(receiverid)){
-            var sender = userRepository.findById(senderid).get();
-            var receiver = userRepository.findById(receiverid).get();
-            sender.getSent().add(receiverid);
-            receiver.getPending().add(senderid);
-            userRepository.save(sender);
-            userRepository.save(receiver);
-            return new ResponseEntity<>(HttpStatus.OK);
+        if (userRepository.existsById(senderid) && userRepository.existsById(receiverid)) {
+            //быстрый тест на шизофрению
+            if (!(senderid.equals(receiverid))) {
+                var sender = userRepository.findById(senderid).get();
+                var receiver = userRepository.findById(receiverid).get();
+                //Проверка есть ли пользователь в списке друзей
+                if (!sender.getFriends().contains(receiverid) || !receiver.getFriends().contains(senderid)) {
+                    //Проверка на повторную отправку запроса
+                    if (!sender.getSent().contains(receiverid) || !receiver.getPending().contains(senderid)) {
+                        //Проверка на дофига умных
+                        if (sender.getPending().contains(receiverid) && receiver.getSent().contains(senderid)) {
+                            return acceptFriendRequest(senderid, receiverid);
+                        }
+                        sender.getSent().add(receiverid);
+                        receiver.getPending().add(senderid);
+                        userRepository.save(sender);
+                        userRepository.save(receiver);
+                        return new ResponseEntity<>(HttpStatus.OK);
+                    }
+                    return new ResponseEntity<>(new ExceptionMessage("Вы уже отправили запрос в друзья этому пользователю"), HttpStatus.CONFLICT);
+                }
+                return new ResponseEntity<>(new ExceptionMessage("Вы уже добавили этого пользователя в друзья"), HttpStatus.CONFLICT);
+            }
+            return new ResponseEntity<>(new ExceptionMessage("Иди в дурку проверся"), HttpStatus.CONFLICT);
         }
         return new ResponseEntity<>(new ExceptionMessage("Такого id не существует"), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> acceptFriendRequest(Integer receiverid, Integer senderid) {
+        if (userRepository.existsById(senderid) && userRepository.existsById(receiverid)) {
+            var sender = userRepository.findById(senderid).get();
+            var receiver = userRepository.findById(receiverid).get();
+            if (receiver.getPending().contains(senderid) && sender.getSent().contains(receiverid)) {
+                receiver.getPending().remove(senderid);
+                sender.getSent().remove(receiverid);
+
+                receiver.getFriends().add(senderid);
+                sender.getFriends().add(receiverid);
+                userRepository.save(receiver);
+                userRepository.save(sender);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new ExceptionMessage("Пользователь не отправлял запрос в друзья"), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new ExceptionMessage("Пользователь с таким ID не существует"), HttpStatus.NOT_FOUND);
     }
 }

@@ -37,6 +37,6 @@ public class UserDAO {
 
 
     public ResponseUserDTO toDTO(){
-        return new ResponseUserDTO(id, email, password);
+        return new ResponseUserDTO(id, email, nickname, friends, image);
     }
 }

@@ -18,4 +18,6 @@ public interface UserService{
     ResponseEntity<?> findByIds(List<Integer> ids);
 
     ResponseEntity<?> sendFriendRequest(Integer senderid, Integer receiverid);
+
+    ResponseEntity<?> acceptFriendRequest(Integer receiverid, Integer senderid);
 }

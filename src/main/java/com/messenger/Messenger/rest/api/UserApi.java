@@ -30,7 +30,11 @@ public interface UserApi {
     ResponseEntity<?> getByIds(@RequestBody List<Integer> ids);
 
     @Operation(summary = "Отправка заявки в друзья")
-    @PostMapping("/{senderid}/{receiverid}")
+    @PostMapping("/friend-request/{senderid}/{receiverid}")
     ResponseEntity<?> sendFriendRequest(@PathVariable(name = "senderid")Integer senderid, @PathVariable(name = "receiverid")Integer receiverid);
+
+    @Operation(summary="Принять запрос в друзья")
+    @PostMapping("/friends/{receiverid}/{senderid}")
+    ResponseEntity<?> acceptFriendRequest(@PathVariable(name = "receiverid")Integer receiverid, @PathVariable(name = "senderid")Integer senderid);
 
 }
