@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -34,6 +36,10 @@ public class UserDAO {
     private List<Integer> sent;
     @Column(name = "image")
     private String image;
+    @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
+    private Set<MessageDAO> sentMessages = new HashSet<>();
+    @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
+    private Set<MessageDAO> receivedMessages  = new HashSet<>();
 
 
     public ResponseUserDTO toDTO(){

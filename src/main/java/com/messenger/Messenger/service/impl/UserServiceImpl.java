@@ -66,7 +66,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> findByIds(List<Integer> ids) {
-        return new ResponseEntity<>(userRepository.findAllById(ids), HttpStatus.OK);
+        List<UserDAO> DAOlist = new ArrayList<>();
+        for (Integer item : ids
+        ) {
+            if (userRepository.existsById(item)) {
+                DAOlist.add(userRepository.findById(item).get());
+            } else {
+                DAOlist.add(new UserDAO(-1, null, null, "Удаленный пользователь", null, null, null, null, null, null));
+            }
+        }
+        List<ResponseUserDTO> DTOlist = new ArrayList<>();
+        for (UserDAO user : DAOlist
+        ) {
+            DTOlist.add(user.toDTO());
+        }
+        return new ResponseEntity<>(DTOlist, HttpStatus.OK);
     }
 
     @Override

@@ -25,6 +25,6 @@ public class RequestUserDTO {
     private String nickname;
 
     public UserDAO toDAO(){
-        return new UserDAO(null, email, password, nickname, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null);
+        return new UserDAO(null, email, password, nickname, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null, null, null);
     }
 }
