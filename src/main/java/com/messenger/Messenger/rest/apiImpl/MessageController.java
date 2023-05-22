@@ -25,4 +25,9 @@ public class MessageController implements MessageApi {
     public ResponseEntity<?> getAll() {
         return messageService.getAll();
     }
+
+    @Override
+    public ResponseEntity<?> getDialog(Integer userid, Integer companionid) {
+        return messageService.getDialog(userid, companionid);
+    }
 }

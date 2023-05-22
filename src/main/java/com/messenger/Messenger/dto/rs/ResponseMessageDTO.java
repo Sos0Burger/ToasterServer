@@ -19,7 +19,7 @@ public class ResponseMessageDTO {
     ResponseUserDTO receiver;
 
     @Schema(description = "Дата сообщения", example = "1684789200000")
-    private long date;
+    private Long date;
 
     List<String> attachments;
 }

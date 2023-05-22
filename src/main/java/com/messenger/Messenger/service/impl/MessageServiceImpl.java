@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -41,5 +42,27 @@ public class MessageServiceImpl implements MessageService {
         }
         messages.forEach(MessageDAO::toDTO);
         return new ResponseEntity<>(DTOs, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> getDialog(Integer userid, Integer companionid) {
+        if(userRepository.existsById(userid)&&userRepository.existsById(companionid)){
+            var user = userRepository.findById(userid).get();
+            var companion = userRepository.findById(companionid).get();
+            List<MessageDAO> messageDAOS = new ArrayList<>();
+            //находим все сообщение между ними
+            messageDAOS.addAll(messageRepository.findBySenderAndReceiver(user, companion));
+            messageDAOS.addAll(messageRepository.findBySenderAndReceiver(companion, user));
+
+            List<ResponseMessageDTO> messageDTOS = new ArrayList<>();
+            for (MessageDAO message:messageDAOS
+                 ) {
+                messageDTOS.add(message.toDTO());
+            }
+
+            messageDTOS.sort(Comparator.comparing(ResponseMessageDTO::getDate));
+            return new ResponseEntity<>(messageDTOS, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ExceptionMessage("Пользователя с таким ID не существует"), HttpStatus.NOT_FOUND);
     }
 }
