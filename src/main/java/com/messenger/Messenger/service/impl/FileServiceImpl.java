@@ -32,6 +32,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public ResponseEntity<?> findById(Integer id) {
+        //Существует ли файл
         if(fileRepository.existsById(id)){
             return new ResponseEntity<>(fileRepository.findById(id).get().getData(), HttpStatus.OK);
         }
