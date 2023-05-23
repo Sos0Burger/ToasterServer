@@ -1,5 +1,6 @@
 package com.messenger.Messenger.dao;
 
+import com.messenger.Messenger.dto.rs.ResponseFileDTO;
 import com.messenger.Messenger.dto.rs.ResponseMessageDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,8 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "messages")
@@ -37,10 +37,17 @@ public class MessageDAO{
     private Date date;
 
     @Column(name = "attachment")
-    private List<String> attachments;
+    @OneToMany
+    @JoinColumn(name = "message_id")
+    private Set<FileDAO> attachments = new HashSet<>();
 
     public ResponseMessageDTO toDTO(){
-        return new ResponseMessageDTO(text, sender.toDTO(), receiver.toDTO(), date.getTime(), attachments);
+        List<ResponseFileDTO> attachmentsDTO = new ArrayList<>();
+        for (FileDAO file:attachments
+             ) {
+            attachmentsDTO.add(file.toDTO());
+        }
+        return new ResponseMessageDTO(text, sender.toDTO(), receiver.toDTO(), date.getTime(), attachmentsDTO);
     }
 
 }

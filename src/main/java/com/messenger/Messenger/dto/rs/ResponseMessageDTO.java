@@ -21,5 +21,5 @@ public class ResponseMessageDTO {
     @Schema(description = "Дата сообщения", example = "1684789200000")
     private Long date;
 
-    List<String> attachments;
+    List<ResponseFileDTO> attachments;
 }

@@ -4,6 +4,7 @@ import com.messenger.Messenger.dao.MessageDAO;
 import com.messenger.Messenger.dto.rq.RequestMessageDTO;
 import com.messenger.Messenger.dto.rs.ResponseMessageDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
+import com.messenger.Messenger.repository.FileRepository;
 import com.messenger.Messenger.repository.MessageRepository;
 import com.messenger.Messenger.repository.UserRepository;
 import com.messenger.Messenger.service.MessageService;
@@ -12,7 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -24,11 +27,21 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private FileRepository fileRepository;
+
     @Override
     public ResponseEntity<?> create(RequestMessageDTO message) {
         if(userRepository.existsById(message.getSender())&&userRepository.existsById(message.getReceiver())){
-            messageRepository.save(message.toDAO());
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            if(fileRepository.findAllById(message.getAttachments()).size() == message.getAttachments().size()){
+                try {
+                    messageRepository.save(message.toDAO());
+                } catch (IOException e) {
+                    return new ResponseEntity<>(new ExceptionMessage("Ошибка загрузки файла(ов)"), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+                return new ResponseEntity<>(HttpStatus.CREATED);
+            }
+            return new ResponseEntity<>(new ExceptionMessage("Файла с таким ID не существует"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ExceptionMessage("Пользователя с таким ID не существует"), HttpStatus.NOT_FOUND);
     }
