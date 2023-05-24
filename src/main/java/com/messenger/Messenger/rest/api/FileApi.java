@@ -1,6 +1,12 @@
 package com.messenger.Messenger.rest.api;
 
+import com.messenger.Messenger.exception.ExceptionMessage;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,7 +15,23 @@ import org.springframework.web.multipart.MultipartFile;
 public interface FileApi {
     @Operation(summary = "Загрузка файла")
     @PostMapping(value = "/upload")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Файл успешно загружен, в ответе ID загруженных файлов",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Integer.class)))),
+            @ApiResponse(responseCode = "500", description = "Ошибка записи файлов",
+                    content = @Content(schema = @Schema(implementation = ExceptionMessage.class))
+            )
+    })
     ResponseEntity<?> upload(@RequestParam("attachments") MultipartFile[] attachments);
+
+    @Operation(summary = "Получение файла по ID")
     @GetMapping("/{id}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Файл успешно получен",
+                    content = @Content(schema = @Schema(implementation = Byte[].class))),
+            @ApiResponse(responseCode = "404", description = "Файл с таким ID не найден",
+                    content = @Content(schema = @Schema(implementation = ExceptionMessage.class))
+            )
+    })
     ResponseEntity<?> getFile(@PathVariable Integer id);
 }
