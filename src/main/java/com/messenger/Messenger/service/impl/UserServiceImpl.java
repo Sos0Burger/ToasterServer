@@ -26,9 +26,6 @@ public class UserServiceImpl implements UserService {
         if (!userRepository.findByEmail(requestUserDTO.getEmail()).isEmpty()) {
             return new ResponseEntity<>(new ExceptionMessage("Пользователь с такой почтой уже существует"), HttpStatus.CONFLICT);
         }
-        if (!userRepository.findByNickname(requestUserDTO.getNickname()).isEmpty()) {
-            return new ResponseEntity<>(new ExceptionMessage("Пользователь с таким именем уже существует"), HttpStatus.CONFLICT);
-        }
         userRepository.save(requestUserDTO.toDAO());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -58,7 +55,7 @@ public class UserServiceImpl implements UserService {
         var user = userRepository.findByEmail(auth.getEmail());
         if (!user.isEmpty()) {
             if (user.get(0).getPassword().equals(auth.getPassword())) {
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<>(user.get(0).getId(),HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
