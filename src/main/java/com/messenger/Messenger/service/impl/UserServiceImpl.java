@@ -51,14 +51,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> auth(RequestAuth auth) {
+    public ResponseEntity<ExceptionMessage> auth(RequestAuth auth) {
         var user = userRepository.findByEmail(auth.getEmail());
         if (!user.isEmpty()) {
             if (user.get(0).getPassword().equals(auth.getPassword())) {
-                return new ResponseEntity<>(user.get(0).getId(),HttpStatus.OK);
+                return new ResponseEntity<>(new ExceptionMessage(user.get(0).getId().toString()),HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ExceptionMessage("Не найден"), HttpStatus.NOT_FOUND);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.messenger.Messenger.rest.api;
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
 import com.messenger.Messenger.dto.rs.ResponseUserDTO;
+import com.messenger.Messenger.exception.ExceptionMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -45,7 +46,7 @@ public interface UserApi {
 
     @Operation(summary = "Авторизация")
     @GetMapping("/auth")
-    ResponseEntity<?> auth(@Validated @RequestBody RequestAuth auth);
+    ResponseEntity<ExceptionMessage> auth(@RequestHeader(value = "email")String email, @RequestHeader(value = "hash") String hash);
 
     @Operation(summary = "Получение данных группы пользователей")
     @GetMapping("/ids")
