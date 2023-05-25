@@ -2,12 +2,10 @@ package com.messenger.Messenger.rest.apiImpl;
 
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
-import com.messenger.Messenger.exception.ExceptionMessage;
 import com.messenger.Messenger.rest.api.UserApi;
 import com.messenger.Messenger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -37,7 +35,7 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<ExceptionMessage> auth(String email, String hash) {
+    public ResponseEntity<?> auth(String email, String hash) {
         return userService.auth(new RequestAuth(email, hash));
     }
 

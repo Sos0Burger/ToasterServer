@@ -3,7 +3,6 @@ package com.messenger.Messenger.service;
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
 import com.messenger.Messenger.dto.rs.ResponseUserDTO;
-import com.messenger.Messenger.exception.ExceptionMessage;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -15,7 +14,7 @@ public interface UserService{
 
     ResponseEntity<?> delete(Integer id);
 
-    ResponseEntity<ExceptionMessage> auth(RequestAuth auth);
+    ResponseEntity<?> auth(RequestAuth auth);
     ResponseEntity<?> findByIds(List<Integer> ids);
 
     ResponseEntity<?> sendFriendRequest(Integer senderid, Integer receiverid);
