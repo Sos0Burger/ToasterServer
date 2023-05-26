@@ -2,6 +2,7 @@ package com.messenger.Messenger.rest.api;
 
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
+import com.messenger.Messenger.dto.rs.FriendDTO;
 import com.messenger.Messenger.dto.rs.ResponseUserDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,5 +60,10 @@ public interface UserApi {
     @Operation(summary = "Принять запрос в друзья")
     @PostMapping("/friends/{receiverid}/{senderid}")
     ResponseEntity<?> acceptFriendRequest(@PathVariable(name = "receiverid") Integer receiverid, @PathVariable(name = "senderid") Integer senderid);
+
+    @Operation(summary = "Список друзей")
+    @GetMapping("/{id}/friends")
+    ResponseEntity<?> getFriends(@PathVariable("id") Integer id);
+
 
 }

@@ -3,6 +3,7 @@ package com.messenger.Messenger.service.impl;
 import com.messenger.Messenger.dao.UserDAO;
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
+import com.messenger.Messenger.dto.rs.FriendDTO;
 import com.messenger.Messenger.dto.rs.ResponseUserDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
 import com.messenger.Messenger.repository.UserRepository;
@@ -128,5 +129,23 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<>(new ExceptionMessage("Пользователь не отправлял запрос в друзья"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ExceptionMessage("Пользователь с таким ID не существует"), HttpStatus.NOT_FOUND);
+    }
+
+
+
+    @Override
+    public ResponseEntity<?> getFriends(Integer id) {
+        if(userRepository.existsById(id)){
+            var friendList = userRepository.findById(id).get().getFriends();
+            List<FriendDTO> friendDTOList = new ArrayList<>();
+
+            for (var item: friendList
+                 ) {
+                friendDTOList.add(userRepository.findById(item).get().toFriendDTO());
+            }
+
+            return new ResponseEntity<>(friendDTOList, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ExceptionMessage("Пользователь не найден"), HttpStatus.NOT_FOUND);
     }
 }

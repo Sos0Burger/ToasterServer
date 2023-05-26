@@ -1,5 +1,6 @@
 package com.messenger.Messenger.dao;
 
+import com.messenger.Messenger.dto.rs.FriendDTO;
 import com.messenger.Messenger.dto.rs.ResponseUserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -43,6 +44,10 @@ public class UserDAO {
 
 
     public ResponseUserDTO toDTO(){
-        return new ResponseUserDTO(id, email, nickname, friends, image);
+        return new ResponseUserDTO(id, nickname, friends, image);
+    }
+
+    public FriendDTO toFriendDTO(){
+        return new FriendDTO(id, nickname, image);
     }
 }

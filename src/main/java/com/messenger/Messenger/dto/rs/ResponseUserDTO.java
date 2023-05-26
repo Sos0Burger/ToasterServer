@@ -12,8 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ResponseUserDTO {
     Integer id;
-    @Schema(description = "Почта пользователя", example = "email@email.com")
-    private String email;
     @Schema(description = "Отображаемое имя", example = "NAGIBATOR228")
     private String nickName;
     @Schema(description = "Список друзей", example = "1,2,4")

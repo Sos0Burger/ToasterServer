@@ -2,6 +2,8 @@ package com.messenger.Messenger.rest.apiImpl;
 
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
+import com.messenger.Messenger.dto.rs.FriendDTO;
+import com.messenger.Messenger.dto.rs.ResponseUserDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
 import com.messenger.Messenger.rest.api.UserApi;
 import com.messenger.Messenger.service.UserService;
@@ -54,5 +56,10 @@ public class UserController implements UserApi {
     @Override
     public ResponseEntity<?> acceptFriendRequest(Integer receiverid, Integer senderid) {
         return userService.acceptFriendRequest(receiverid, senderid);
+    }
+
+    @Override
+    public ResponseEntity<?> getFriends(Integer id) {
+        return userService.getFriends(id);
     }
 }
