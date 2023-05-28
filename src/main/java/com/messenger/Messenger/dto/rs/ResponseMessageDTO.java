@@ -14,9 +14,9 @@ public class ResponseMessageDTO {
     @Schema(description = "Текст сообщения", example = "Привет!")
     private String text;
 
-    ResponseUserDTO sender;
+    FriendDTO sender;
 
-    ResponseUserDTO receiver;
+    FriendDTO receiver;
 
     @Schema(description = "Дата сообщения", example = "1684789200000")
     private Long date;

@@ -1,6 +1,7 @@
 package com.messenger.Messenger.service.impl;
 
 import com.messenger.Messenger.dao.FileDAO;
+import com.messenger.Messenger.dto.rs.ResponseFileDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
 import com.messenger.Messenger.repository.FileRepository;
 import com.messenger.Messenger.service.FileService;
@@ -22,12 +23,12 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public ResponseEntity<?> save(List<MultipartFile> files) throws IOException {
-        List<Integer> ids = new ArrayList<>();
+        List<ResponseFileDTO> fileDTOs = new ArrayList<>();
         for (MultipartFile file : files
         ) {
-            ids.add(fileRepository.save(new FileDAO(null, file.getName(), file.getContentType(), file.getBytes())).getId());
+            fileDTOs.add(fileRepository.save(new FileDAO(null, file.getName(), file.getContentType(), file.getBytes())).toDTO());
         }
-        return new ResponseEntity<>(ids, HttpStatus.CREATED);
+        return new ResponseEntity<>(fileDTOs, HttpStatus.CREATED);
     }
 
     @Override
