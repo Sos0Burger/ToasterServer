@@ -16,16 +16,16 @@ public interface FileApi {
     @Operation(summary = "Загрузка файла")
     @PostMapping(value = "/upload")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Файл успешно загружен, в ответе ID загруженных файлов",
+            @ApiResponse(responseCode = "201", description = "Файл успешно загружен",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Integer.class)))),
             @ApiResponse(responseCode = "500", description = "Ошибка записи файлов",
                     content = @Content(schema = @Schema(implementation = ExceptionMessage.class))
             )
     })
-    ResponseEntity<?> upload(@RequestParam("attachments") MultipartFile[] attachments);
+    ResponseEntity<?> upload(@RequestPart MultipartFile attachment);
 
     @Operation(summary = "Получение файла по ID")
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Файл успешно получен",
                     content = @Content(schema = @Schema(implementation = Byte[].class))),

@@ -31,6 +31,6 @@ public class FileDAO {
     private byte[] data;
 
     public ResponseFileDTO toDTO(){
-        return new ResponseFileDTO(name, ServletUriComponentsBuilder.fromCurrentContextPath().path("/file/").path(id.toString()).toUriString(), type, data.length);
+        return new ResponseFileDTO(id,name, ServletUriComponentsBuilder.fromCurrentContextPath().path("/file/").path(id.toString()).toUriString(), type, data.length);
     }
 }
