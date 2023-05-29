@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
             }
             return new ResponseEntity<>(new ExceptionMessage("Иди в дурку проверся"), HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<>(new ExceptionMessage("Такого id не существует"), HttpStatus.OK);
+        return new ResponseEntity<>(new ExceptionMessage("Такого id не существует"), HttpStatus.NOT_FOUND);
     }
 
     @Override
