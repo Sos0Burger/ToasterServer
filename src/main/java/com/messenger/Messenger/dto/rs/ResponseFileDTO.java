@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseFileDTO {
+    private Integer id;
     @Schema(description = "Имя файла", example = "Кот")
     private String name;
 

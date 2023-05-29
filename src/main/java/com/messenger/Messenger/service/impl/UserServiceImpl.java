@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         var user = userRepository.findByEmail(auth.getEmail());
         if (!user.isEmpty()) {
             if (user.get(0).getPassword().equals(auth.getPassword())) {
-                return new ResponseEntity<>(user.get(0).getId().toString(),HttpStatus.OK);
+                return new ResponseEntity<>(user.get(0).getId(),HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(new ExceptionMessage("Аккаунт не найден"), HttpStatus.NOT_FOUND);

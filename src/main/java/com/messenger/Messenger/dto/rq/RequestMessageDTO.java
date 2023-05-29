@@ -5,15 +5,12 @@ import com.messenger.Messenger.dao.FileDAO;
 import com.messenger.Messenger.dao.MessageDAO;
 import com.messenger.Messenger.repository.FileRepository;
 import com.messenger.Messenger.repository.UserRepository;
-import com.messenger.Messenger.service.FileService;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
@@ -28,7 +25,6 @@ import java.util.Set;
 public class RequestMessageDTO {
     private static final UserRepository userRepository = SpringConfiguration.contextProvider().getApplicationContext().getBean("userRepository", UserRepository.class);
     private static final FileRepository fileRepository = SpringConfiguration.contextProvider().getApplicationContext().getBean("fileRepository", FileRepository.class);
-    @NotNull
     @Schema(description = "Текст сообщения", example = "Привет!")
     private String text;
 

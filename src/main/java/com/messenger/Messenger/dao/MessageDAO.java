@@ -47,7 +47,7 @@ public class MessageDAO{
              ) {
             attachmentsDTO.add(file.toDTO());
         }
-        return new ResponseMessageDTO(text, sender.toDTO(), receiver.toDTO(), date.getTime(), attachmentsDTO);
+        return new ResponseMessageDTO(text, sender.toFriendDTO(), receiver.toFriendDTO(), date.getTime(), attachmentsDTO);
     }
 
 }
