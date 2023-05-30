@@ -12,12 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -29,13 +28,18 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private FileRepository fileRepository;
+    @Autowired
+    private SimpMessagingTemplate template;
 
     @Override
     public ResponseEntity<?> create(RequestMessageDTO message) {
         if(userRepository.existsById(message.getSender())&&userRepository.existsById(message.getReceiver())){
             if(fileRepository.findAllById(message.getAttachments()).size() == message.getAttachments().size()){
                 try {
-                    messageRepository.save(message.toDAO());
+                    Integer id = messageRepository.save(message.toDAO()).getId();
+                    MessageDAO messageDAO = messageRepository.findById(id).get();
+                    template.convertAndSendToUser(messageDAO.getReceiver().getId().toString(),"/messageQueue", messageDAO.toDTO());
+
                 } catch (IOException e) {
                     return new ResponseEntity<>(new ExceptionMessage("Ошибка загрузки файла(ов)"), HttpStatus.INTERNAL_SERVER_ERROR);
                 }
@@ -73,8 +77,6 @@ public class MessageServiceImpl implements MessageService {
                  ) {
                 messageDTOS.add(message.toDTO());
             }
-
-            messageDTOS.sort(Comparator.comparing(ResponseMessageDTO::getDate));
             return new ResponseEntity<>(messageDTOS, HttpStatus.OK);
         }
         return new ResponseEntity<>(new ExceptionMessage("Пользователя с таким ID не существует"), HttpStatus.NOT_FOUND);
