@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
                         receiver.getPending().add(senderid);
                         userRepository.save(sender);
                         userRepository.save(receiver);
-                        return new ResponseEntity<>(receiver.toFriendDTO(),HttpStatus.OK);
+                        return new ResponseEntity<>(receiver.toFriendDTO(),HttpStatus.CREATED);
                     }
                     return new ResponseEntity<>(new ExceptionMessage("Вы уже отправили запрос в друзья этому пользователю"), HttpStatus.CONFLICT);
                 }

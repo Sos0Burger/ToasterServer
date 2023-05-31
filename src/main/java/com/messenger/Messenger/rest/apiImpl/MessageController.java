@@ -9,9 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 public class MessageController implements MessageApi {
@@ -34,6 +31,6 @@ public class MessageController implements MessageApi {
 
     @Override
     public ResponseEntity<?> getDialog(Integer userid, Integer companionid, Integer page) {
-        return messageService.getDialog(userid, companionid, (Pageable) PageRequest.of(page, 30, Sort.unsorted()));
+        return messageService.getDialog(userid, companionid, (Pageable) PageRequest.of(page, 15, Sort.by(Sort.Direction.DESC, "date")));
     }
 }
