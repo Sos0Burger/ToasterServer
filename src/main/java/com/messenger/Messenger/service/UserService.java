@@ -10,6 +10,9 @@ import java.util.List;
 
 public interface UserService{
     ResponseEntity<?> create(RequestUserDTO requestUserDTO);
+
+    ResponseEntity<?> getUser(Integer id);
+
     ResponseEntity<List<ResponseUserDTO>> getAll();
 
     ResponseEntity<?> delete(Integer id);

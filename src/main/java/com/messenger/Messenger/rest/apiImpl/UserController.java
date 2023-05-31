@@ -25,6 +25,11 @@ public class UserController implements UserApi {
     }
 
     @Override
+    public ResponseEntity<?> getUser(Integer id) {
+        return userService.getUser(id);
+    }
+
+    @Override
     public ResponseEntity<?> getAll() {
         return userService.getAll();
     }

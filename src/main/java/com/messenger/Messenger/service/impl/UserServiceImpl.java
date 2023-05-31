@@ -32,6 +32,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResponseEntity<?> getUser(Integer id) {
+        if(userRepository.existsById(id)){
+            return new ResponseEntity<>(userRepository.findById(id).get().toUserSettingsDTO(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ExceptionMessage("Пользователь не найден"), HttpStatus.NOT_FOUND);
+    }
+
+    @Override
     public ResponseEntity<List<ResponseUserDTO>> getAll() {
         List<UserDAO> DAOlist = userRepository.findAll();
         List<ResponseUserDTO> DTOlist = new ArrayList<>();

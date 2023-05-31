@@ -33,6 +33,10 @@ public interface UserApi {
     @PostMapping
     ResponseEntity<?> create(@Validated @RequestBody RequestUserDTO requestUserDTO);
 
+    @Operation(summary = "Получение данных пользователя")
+    @GetMapping("/{id}")
+    ResponseEntity<?> getUser(@PathVariable("id")Integer id);
+
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
