@@ -144,5 +144,12 @@ public interface UserApi {
     @GetMapping("/{id}/friends")
     ResponseEntity<?> getFriends(@PathVariable("id") Integer id);
 
+    @Operation(summary = "Получить список входящих заявок")
+    @GetMapping("/{id}/pending")
+    ResponseEntity<?> getPending(@PathVariable("id") Integer id);
+
+    @Operation(summary = "Получить список исходящих заявок")
+    @GetMapping("/{id}/sent")
+    ResponseEntity<?> getSent(@PathVariable("id") Integer id);
 
 }

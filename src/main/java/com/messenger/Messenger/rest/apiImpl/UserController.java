@@ -2,8 +2,6 @@ package com.messenger.Messenger.rest.apiImpl;
 
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
-import com.messenger.Messenger.dto.rs.FriendDTO;
-import com.messenger.Messenger.dto.rs.ResponseUserDTO;
 import com.messenger.Messenger.rest.api.UserApi;
 import com.messenger.Messenger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,4 +58,15 @@ public class UserController implements UserApi {
     public ResponseEntity<?> getFriends(Integer id) {
         return userService.getFriends(id);
     }
+
+    @Override
+    public ResponseEntity<?> getPending(Integer id) {
+        return userService.getPending(id);
+    }
+
+    @Override
+    public ResponseEntity<?> getSent(Integer id) {
+        return userService.getSent(id);
+    }
+
 }

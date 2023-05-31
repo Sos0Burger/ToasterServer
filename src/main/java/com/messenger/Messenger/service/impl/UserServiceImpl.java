@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
                         receiver.getPending().add(senderid);
                         userRepository.save(sender);
                         userRepository.save(receiver);
-                        return new ResponseEntity<>(HttpStatus.OK);
+                        return new ResponseEntity<>(receiver.toFriendDTO(),HttpStatus.OK);
                     }
                     return new ResponseEntity<>(new ExceptionMessage("Вы уже отправили запрос в друзья этому пользователю"), HttpStatus.CONFLICT);
                 }
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
                 sender.getFriends().add(receiverid);
                 userRepository.save(receiver);
                 userRepository.save(sender);
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<>(HttpStatus.CREATED);
             }
             return new ResponseEntity<>(new ExceptionMessage("Пользователь не отправлял запрос в друзья"), HttpStatus.NOT_FOUND);
         }
@@ -147,5 +147,33 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<>(friendDTOList, HttpStatus.OK);
         }
         return new ResponseEntity<>(new ExceptionMessage("Пользователь не найден"), HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<?> getPending(Integer id) {
+        if(userRepository.existsById(id)){
+            List<FriendDTO> pendingList = new ArrayList<>();
+            for (Integer item: userRepository.findById(id).get().getPending()
+                 ) {
+                pendingList.add(userRepository.findById(item).get().toFriendDTO());
+            }
+            return new ResponseEntity<>(pendingList, HttpStatus.OK);
+
+        }
+        return new ResponseEntity<>(new ExceptionMessage("Пользователь не существует"), HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<?> getSent(Integer id) {
+        if(userRepository.existsById(id)){
+            List<FriendDTO> pendingList = new ArrayList<>();
+            for (Integer item: userRepository.findById(id).get().getSent()
+            ) {
+                pendingList.add(userRepository.findById(item).get().toFriendDTO());
+            }
+            return new ResponseEntity<>(pendingList, HttpStatus.OK);
+
+        }
+        return new ResponseEntity<>(new ExceptionMessage("Пользователь не существует"), HttpStatus.NOT_FOUND);
     }
 }

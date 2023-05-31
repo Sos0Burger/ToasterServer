@@ -22,4 +22,8 @@ public interface UserService{
     ResponseEntity<?> acceptFriendRequest(Integer receiverid, Integer senderid);
 
     ResponseEntity<?> getFriends(Integer id);
+
+    ResponseEntity<?> getPending(Integer id);
+
+    ResponseEntity<?> getSent(Integer id);
 }
