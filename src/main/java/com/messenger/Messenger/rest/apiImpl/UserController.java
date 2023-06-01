@@ -74,4 +74,15 @@ public class UserController implements UserApi {
         return userService.getSent(id);
     }
 
+    @Override
+    public ResponseEntity<?> updatePicture(Integer id, RequestAuth auth, String URL) {
+        return userService.updatePicture(id, auth, URL);
+    }
+
+    @Override
+    public ResponseEntity<?> updateNickname(Integer id, RequestAuth auth, String nickname) {
+        return userService.updateNickname(id, auth, nickname);
+    }
+
+
 }

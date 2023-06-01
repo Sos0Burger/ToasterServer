@@ -5,6 +5,7 @@ import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
 import com.messenger.Messenger.dto.rs.FriendDTO;
 import com.messenger.Messenger.dto.rs.ResponseUserDTO;
+import com.messenger.Messenger.dto.rs.UserSettingsDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
 import com.messenger.Messenger.repository.UserRepository;
 import com.messenger.Messenger.service.UserService;
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> getUser(Integer id) {
-        if(userRepository.existsById(id)){
+        if (userRepository.existsById(id)) {
             return new ResponseEntity<>(userRepository.findById(id).get().toUserSettingsDTO(), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ExceptionMessage("Пользователь не найден"), HttpStatus.NOT_FOUND);
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
         var user = userRepository.findByEmail(auth.getEmail());
         if (!user.isEmpty()) {
             if (user.get(0).getPassword().equals(auth.getPassword())) {
-                return new ResponseEntity<>(user.get(0).getId(),HttpStatus.OK);
+                return new ResponseEntity<>(user.get(0).getId(), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(new ExceptionMessage("Аккаунт не найден"), HttpStatus.NOT_FOUND);
@@ -108,7 +109,7 @@ public class UserServiceImpl implements UserService {
                         receiver.getPending().add(senderid);
                         userRepository.save(sender);
                         userRepository.save(receiver);
-                        return new ResponseEntity<>(receiver.toFriendDTO(),HttpStatus.OK);
+                        return new ResponseEntity<>(receiver.toFriendDTO(), HttpStatus.OK);
                     }
                     return new ResponseEntity<>(new ExceptionMessage("Вы уже отправили запрос в друзья этому пользователю"), HttpStatus.CONFLICT);
                 }
@@ -140,15 +141,14 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     public ResponseEntity<?> getFriends(Integer id) {
-        if(userRepository.existsById(id)){
+        if (userRepository.existsById(id)) {
             var friendList = userRepository.findById(id).get().getFriends();
             List<FriendDTO> friendDTOList = new ArrayList<>();
 
-            for (var item: friendList
-                 ) {
+            for (var item : friendList
+            ) {
                 friendDTOList.add(userRepository.findById(item).get().toFriendDTO());
             }
 
@@ -159,10 +159,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> getPending(Integer id) {
-        if(userRepository.existsById(id)){
+        if (userRepository.existsById(id)) {
             List<FriendDTO> pendingList = new ArrayList<>();
-            for (Integer item: userRepository.findById(id).get().getPending()
-                 ) {
+            for (Integer item : userRepository.findById(id).get().getPending()
+            ) {
                 pendingList.add(userRepository.findById(item).get().toFriendDTO());
             }
             return new ResponseEntity<>(pendingList, HttpStatus.OK);
@@ -173,9 +173,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> getSent(Integer id) {
-        if(userRepository.existsById(id)){
+        if (userRepository.existsById(id)) {
             List<FriendDTO> pendingList = new ArrayList<>();
-            for (Integer item: userRepository.findById(id).get().getSent()
+            for (Integer item : userRepository.findById(id).get().getSent()
             ) {
                 pendingList.add(userRepository.findById(item).get().toFriendDTO());
             }
@@ -183,5 +183,36 @@ public class UserServiceImpl implements UserService {
 
         }
         return new ResponseEntity<>(new ExceptionMessage("Пользователь не существует"), HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<?> updatePicture(Integer id, RequestAuth auth, String URL) {
+        if(userRepository.existsById(id)){
+            UserDAO userDAO = userRepository.findById(id).get();
+            if(userDAO.getEmail().equals(auth.getEmail()) && userDAO.getPassword().equals(auth.getPassword())){
+                userDAO.setImage(URL);
+                userRepository.save(userDAO);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new ExceptionMessage("Неверная почта или пароль"), HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(new ExceptionMessage("Пользователь не найден"), HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<?> updateNickname(Integer id, RequestAuth auth, String nickname) {
+        if(userRepository.existsById(id)){
+            UserDAO userDAO = userRepository.findById(id).get();
+            if(userDAO.getEmail().equals(auth.getEmail()) && userDAO.getPassword().equals(auth.getPassword())){
+                if(userRepository.findByNickname(nickname).isEmpty()) {
+                    userDAO.setNickname(nickname);
+                    userRepository.save(userDAO);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }
+                return new ResponseEntity<>(new ExceptionMessage("Такое имя уже занято"), HttpStatus.CONFLICT);
+            }
+            return new ResponseEntity<>(new ExceptionMessage("Неверная почта или пароль"), HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(new ExceptionMessage("Пользователь не найден"), HttpStatus.NOT_FOUND);
     }
 }

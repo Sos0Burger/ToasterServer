@@ -3,6 +3,7 @@ package com.messenger.Messenger.service;
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
 import com.messenger.Messenger.dto.rs.ResponseUserDTO;
+import com.messenger.Messenger.dto.rs.UserSettingsDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -29,4 +30,8 @@ public interface UserService{
     ResponseEntity<?> getPending(Integer id);
 
     ResponseEntity<?> getSent(Integer id);
+
+    ResponseEntity<?> updatePicture(Integer id, RequestAuth auth, String url);
+
+    ResponseEntity<?> updateNickname(Integer id, RequestAuth auth, String nickname);
 }

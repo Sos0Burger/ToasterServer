@@ -1,7 +1,9 @@
 package com.messenger.Messenger.rest.api;
 
+import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
 import com.messenger.Messenger.dto.rs.ResponseUserDTO;
+import com.messenger.Messenger.dto.rs.UserSettingsDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -156,4 +158,11 @@ public interface UserApi {
     @GetMapping("/{id}/sent")
     ResponseEntity<?> getSent(@PathVariable("id") Integer id);
 
+    @Operation(summary = "Обновить данные пользователя")
+    @PutMapping("/{id}/picture")
+    ResponseEntity<?> updatePicture(@PathVariable("id") Integer id, @RequestBody RequestAuth auth, @RequestBody String url);
+
+    @Operation(summary = "Обновить отображаемое имя")
+    @PutMapping("/{id}/nickname")
+    ResponseEntity<?> updateNickname(@PathVariable("id") Integer id, @RequestBody RequestAuth auth, @RequestBody String nickname);
 }
