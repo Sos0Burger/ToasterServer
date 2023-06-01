@@ -84,5 +84,10 @@ public class UserController implements UserApi {
         return userService.updateNickname(id, auth, nickname);
     }
 
+    @Override
+    public ResponseEntity<?> getSettings(Integer id) {
+        return userService.getSettings(id);
+    }
+
 
 }

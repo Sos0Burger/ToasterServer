@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +40,7 @@ public class RequestMessageDTO {
     private Long date;
     @ArraySchema
     List<Integer> attachments;
-    public MessageDAO toDAO() throws IOException {
+    public MessageDAO toDAO() {
         Set<FileDAO> fileDAOS = new HashSet<>();
         for (Integer id: attachments
              ) {

@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -34,16 +33,13 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public ResponseEntity<?> create(RequestMessageDTO message) {
-        if(userRepository.existsById(message.getSender())&&userRepository.existsById(message.getReceiver())){
-            if(fileRepository.findAllById(message.getAttachments()).size() == message.getAttachments().size()){
-                try {
-                    Integer id = messageRepository.save(message.toDAO()).getId();
-                    MessageDAO messageDAO = messageRepository.findById(id).get();
-                    template.convertAndSendToUser(messageDAO.getReceiver().getId().toString(),"/messageQueue", messageDAO.toDTO());
+        if (userRepository.existsById(message.getSender()) && userRepository.existsById(message.getReceiver())) {
+            if (fileRepository.findAllById(message.getAttachments()).size() == message.getAttachments().size()) {
 
-                } catch (IOException e) {
-                    return new ResponseEntity<>(new ExceptionMessage("Ошибка загрузки файла(ов)"), HttpStatus.INTERNAL_SERVER_ERROR);
-                }
+                Integer id = messageRepository.save(message.toDAO()).getId();
+                MessageDAO messageDAO = messageRepository.findById(id).get();
+                template.convertAndSendToUser(messageDAO.getReceiver().getId().toString(), "/messageQueue", messageDAO.toDTO());
+
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }
             return new ResponseEntity<>(new ExceptionMessage("Файла с таким ID не существует"), HttpStatus.NOT_FOUND);
@@ -55,8 +51,8 @@ public class MessageServiceImpl implements MessageService {
     public ResponseEntity<?> getAll() {
         var messages = messageRepository.findAll();
         List<ResponseMessageDTO> DTOs = new ArrayList<>();
-        for (MessageDAO message: messages
-             ) {
+        for (MessageDAO message : messages
+        ) {
             DTOs.add(message.toDTO());
         }
         messages.forEach(MessageDAO::toDTO);
@@ -65,7 +61,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public ResponseEntity<?> getDialog(Integer userid, Integer companionid, Pageable pageable) {
-        if(userRepository.existsById(userid)&&userRepository.existsById(companionid)){
+        if (userRepository.existsById(userid) && userRepository.existsById(companionid)) {
             var user = userRepository.findById(userid).get();
             var companion = userRepository.findById(companionid).get();
             List<MessageDAO> messageDAOS = new ArrayList<>();
@@ -73,8 +69,8 @@ public class MessageServiceImpl implements MessageService {
             messageDAOS.addAll(messageRepository.findBySenderAndReceiver(user, companion, pageable).getContent());
 
             List<ResponseMessageDTO> messageDTOS = new ArrayList<>();
-            for (MessageDAO message:messageDAOS
-                 ) {
+            for (MessageDAO message : messageDAOS
+            ) {
                 messageDTOS.add(message.toDTO());
             }
             messageDTOS.sort(Comparator.comparing(ResponseMessageDTO::getDate).reversed());

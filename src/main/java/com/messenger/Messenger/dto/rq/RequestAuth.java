@@ -12,5 +12,5 @@ public class RequestAuth {
     @NotNull
     private String email;
     @NotNull
-    private String password;
+    private String hash;
 }

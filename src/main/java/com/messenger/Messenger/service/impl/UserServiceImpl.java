@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> auth(RequestAuth auth) {
         var user = userRepository.findByEmail(auth.getEmail());
         if (!user.isEmpty()) {
-            if (user.get(0).getPassword().equals(auth.getPassword())) {
+            if (user.get(0).getPassword().equals(auth.getHash())) {
                 return new ResponseEntity<>(user.get(0).getId(),HttpStatus.OK);
             }
         }
@@ -186,11 +186,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> updatePicture(Integer id, RequestAuth auth, String URL) {
+    public ResponseEntity<?> updatePicture(Integer id, RequestAuth auth, String url) {
         if(userRepository.existsById(id)){
             UserDAO userDAO = userRepository.findById(id).get();
-            if(userDAO.getEmail().equals(auth.getEmail()) && userDAO.getPassword().equals(auth.getPassword())){
-                userDAO.setImage(URL);
+            if(userDAO.getEmail().equals(auth.getEmail()) && userDAO.getPassword().equals(auth.getHash())){
+                userDAO.setImage(url);
                 userRepository.save(userDAO);
                 return new ResponseEntity<>(HttpStatus.OK);
             }
@@ -203,7 +203,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> updateNickname(Integer id, RequestAuth auth, String nickname) {
         if(userRepository.existsById(id)){
             UserDAO userDAO = userRepository.findById(id).get();
-            if(userDAO.getEmail().equals(auth.getEmail()) && userDAO.getPassword().equals(auth.getPassword())){
+            if(userDAO.getEmail().equals(auth.getEmail()) && userDAO.getPassword().equals(auth.getHash())){
                 if(userRepository.findByNickname(nickname).isEmpty()) {
                     userDAO.setNickname(nickname);
                     userRepository.save(userDAO);
@@ -214,5 +214,13 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<>(new ExceptionMessage("Неверная почта или пароль"), HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(new ExceptionMessage("Пользователь не найден"), HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<?> getSettings(Integer id) {
+        if(userRepository.existsById(id)){
+            return new ResponseEntity<>(userRepository.findById(id).get().toUserSettingsDTO(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ExceptionMessage("Пользователь не найден"), HttpStatus.OK);
     }
 }

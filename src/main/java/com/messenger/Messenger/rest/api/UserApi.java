@@ -3,7 +3,6 @@ package com.messenger.Messenger.rest.api;
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
 import com.messenger.Messenger.dto.rs.ResponseUserDTO;
-import com.messenger.Messenger.dto.rs.UserSettingsDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -37,7 +36,7 @@ public interface UserApi {
 
     @Operation(summary = "Получение данных пользователя")
     @GetMapping("/{id}")
-    ResponseEntity<?> getUser(@PathVariable("id")Integer id);
+    ResponseEntity<?> getUser(@PathVariable("id") Integer id);
 
     @ApiResponses({
             @ApiResponse(
@@ -160,9 +159,13 @@ public interface UserApi {
 
     @Operation(summary = "Обновить данные пользователя")
     @PutMapping("/{id}/picture")
-    ResponseEntity<?> updatePicture(@PathVariable("id") Integer id, @RequestBody RequestAuth auth, @RequestBody String url);
+    ResponseEntity<?> updatePicture(@PathVariable("id") Integer id, @RequestBody RequestAuth auth, @RequestHeader("url") String url);
 
     @Operation(summary = "Обновить отображаемое имя")
     @PutMapping("/{id}/nickname")
-    ResponseEntity<?> updateNickname(@PathVariable("id") Integer id, @RequestBody RequestAuth auth, @RequestBody String nickname);
+    ResponseEntity<?> updateNickname(@PathVariable("id") Integer id, @RequestBody RequestAuth auth, @RequestHeader("nickname") String nickname);
+
+    @Operation(summary = "Получить текущие настройки")
+    @GetMapping("/{id}/settings")
+    ResponseEntity<?> getSettings(@PathVariable("id") Integer id);
 }
