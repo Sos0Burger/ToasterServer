@@ -28,8 +28,6 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private FileRepository fileRepository;
-    @Autowired
-    private SimpMessagingTemplate template;
 
     @Override
     public ResponseEntity<?> create(RequestMessageDTO message) {
@@ -38,7 +36,6 @@ public class MessageServiceImpl implements MessageService {
 
                 Integer id = messageRepository.save(message.toDAO()).getId();
                 MessageDAO messageDAO = messageRepository.findById(id).get();
-                template.convertAndSendToUser(messageDAO.getReceiver().getId().toString(), "/messageQueue", messageDAO.toDTO());
 
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }
