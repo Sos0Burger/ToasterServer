@@ -1,19 +1,24 @@
 package com.messenger.Messenger.service.impl;
 
 import com.messenger.Messenger.dao.MessageDAO;
+import com.messenger.Messenger.dto.rq.NotificationContent;
 import com.messenger.Messenger.dto.rq.RequestMessageDTO;
 import com.messenger.Messenger.dto.rs.ResponseMessageDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
 import com.messenger.Messenger.repository.FileRepository;
 import com.messenger.Messenger.repository.MessageRepository;
 import com.messenger.Messenger.repository.UserRepository;
+import com.messenger.Messenger.retrofit.FirebaseApiImpl;
 import com.messenger.Messenger.service.MessageService;
+import okhttp3.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,9 +30,10 @@ public class MessageServiceImpl implements MessageService {
     private MessageRepository messageRepository;
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private FileRepository fileRepository;
+
+    FirebaseApiImpl firebaseApi = new FirebaseApiImpl();
 
     @Override
     public ResponseEntity<?> create(RequestMessageDTO message) {
@@ -36,7 +42,23 @@ public class MessageServiceImpl implements MessageService {
 
                 Integer id = messageRepository.save(message.toDAO()).getId();
                 MessageDAO messageDAO = messageRepository.findById(id).get();
+                Call<ResponseBody> response = firebaseApi.sendNotification(new NotificationContent(messageDAO.getReceiver().getFirebaseToken(), messageDAO.toDTO()));
+                response.enqueue(new Callback<ResponseBody>(){
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()){
+                            System.out.println(response.code());
+                        }
+                        else {
+                            System.out.println(response.code());
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable throwable) {
+                        System.out.println(throwable.getMessage());
+                    }
+                } );
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }
             return new ResponseEntity<>(new ExceptionMessage("Файла с таким ID не существует"), HttpStatus.NOT_FOUND);

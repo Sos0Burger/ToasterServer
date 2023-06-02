@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> getUser(Integer id) {
-        if(userRepository.existsById(id)){
+        if (userRepository.existsById(id)) {
             return new ResponseEntity<>(userRepository.findById(id).get().toUserSettingsDTO(), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ExceptionMessage("Пользователь не найден"), HttpStatus.NOT_FOUND);
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
         var user = userRepository.findByEmail(auth.getEmail());
         if (!user.isEmpty()) {
             if (user.get(0).getPassword().equals(auth.getHash())) {
-                return new ResponseEntity<>(user.get(0).getId(),HttpStatus.OK);
+                return new ResponseEntity<>(user.get(0).getId(), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(new ExceptionMessage("Аккаунт не найден"), HttpStatus.NOT_FOUND);
@@ -78,7 +78,17 @@ public class UserServiceImpl implements UserService {
             if (userRepository.existsById(item)) {
                 DAOlist.add(userRepository.findById(item).get());
             } else {
-                DAOlist.add(new UserDAO(-1, null, null, "Удаленный пользователь", null, null, null, null, null, null));
+                DAOlist.add(new UserDAO(-1,
+                        null,
+                        null,
+                        "Удаленный пользователь",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null));
             }
         }
         List<ResponseUserDTO> DTOlist = new ArrayList<>();
@@ -108,7 +118,7 @@ public class UserServiceImpl implements UserService {
                         receiver.getPending().add(senderid);
                         userRepository.save(sender);
                         userRepository.save(receiver);
-                        return new ResponseEntity<>(receiver.toFriendDTO(),HttpStatus.OK);
+                        return new ResponseEntity<>(receiver.toFriendDTO(), HttpStatus.CREATED);
                     }
                     return new ResponseEntity<>(new ExceptionMessage("Вы уже отправили запрос в друзья этому пользователю"), HttpStatus.CONFLICT);
                 }
@@ -140,15 +150,14 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     public ResponseEntity<?> getFriends(Integer id) {
-        if(userRepository.existsById(id)){
+        if (userRepository.existsById(id)) {
             var friendList = userRepository.findById(id).get().getFriends();
             List<FriendDTO> friendDTOList = new ArrayList<>();
 
-            for (var item: friendList
-                 ) {
+            for (var item : friendList
+            ) {
                 friendDTOList.add(userRepository.findById(item).get().toFriendDTO());
             }
 
@@ -159,10 +168,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> getPending(Integer id) {
-        if(userRepository.existsById(id)){
+        if (userRepository.existsById(id)) {
             List<FriendDTO> pendingList = new ArrayList<>();
-            for (Integer item: userRepository.findById(id).get().getPending()
-                 ) {
+            for (Integer item : userRepository.findById(id).get().getPending()
+            ) {
                 pendingList.add(userRepository.findById(item).get().toFriendDTO());
             }
             return new ResponseEntity<>(pendingList, HttpStatus.OK);
@@ -173,9 +182,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> getSent(Integer id) {
-        if(userRepository.existsById(id)){
+        if (userRepository.existsById(id)) {
             List<FriendDTO> pendingList = new ArrayList<>();
-            for (Integer item: userRepository.findById(id).get().getSent()
+            for (Integer item : userRepository.findById(id).get().getSent()
             ) {
                 pendingList.add(userRepository.findById(item).get().toFriendDTO());
             }
@@ -187,9 +196,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> updatePicture(Integer id, RequestAuth auth, String url) {
-        if(userRepository.existsById(id)){
+        if (userRepository.existsById(id)) {
             UserDAO userDAO = userRepository.findById(id).get();
-            if(userDAO.getEmail().equals(auth.getEmail()) && userDAO.getPassword().equals(auth.getHash())){
+            if (userDAO.getEmail().equals(auth.getEmail()) && userDAO.getPassword().equals(auth.getHash())) {
                 userDAO.setImage(url);
                 userRepository.save(userDAO);
                 return new ResponseEntity<>(HttpStatus.OK);
@@ -201,10 +210,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> updateNickname(Integer id, RequestAuth auth, String nickname) {
-        if(userRepository.existsById(id)){
+        if (userRepository.existsById(id)) {
             UserDAO userDAO = userRepository.findById(id).get();
-            if(userDAO.getEmail().equals(auth.getEmail()) && userDAO.getPassword().equals(auth.getHash())){
-                if(userRepository.findByNickname(nickname).isEmpty()) {
+            if (userDAO.getEmail().equals(auth.getEmail()) && userDAO.getPassword().equals(auth.getHash())) {
+                if (userRepository.findByNickname(nickname).isEmpty()) {
                     userDAO.setNickname(nickname);
                     userRepository.save(userDAO);
                     return new ResponseEntity<>(HttpStatus.OK);
@@ -218,9 +227,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> getSettings(Integer id) {
-        if(userRepository.existsById(id)){
+        if (userRepository.existsById(id)) {
             return new ResponseEntity<>(userRepository.findById(id).get().toUserSettingsDTO(), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ExceptionMessage("Пользователь не найден"), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> updateToken(Integer id, String token) {
+        if(userRepository.existsById(id)){
+            UserDAO user = userRepository.findById(id).get();
+            user.setFirebaseToken(token);
+            userRepository.save(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ExceptionMessage("Пользователь не найден"),HttpStatus.NOT_FOUND);
     }
 }

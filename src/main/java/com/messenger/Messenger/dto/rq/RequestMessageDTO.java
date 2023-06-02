@@ -1,6 +1,6 @@
 package com.messenger.Messenger.dto.rq;
 
-import com.messenger.Messenger.config.SpringConfiguration;
+import com.messenger.Messenger.config.SpringConfig;
 import com.messenger.Messenger.dao.FileDAO;
 import com.messenger.Messenger.dao.MessageDAO;
 import com.messenger.Messenger.repository.FileRepository;
@@ -22,8 +22,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestMessageDTO {
-    private static final UserRepository userRepository = SpringConfiguration.contextProvider().getApplicationContext().getBean("userRepository", UserRepository.class);
-    private static final FileRepository fileRepository = SpringConfiguration.contextProvider().getApplicationContext().getBean("fileRepository", FileRepository.class);
+    private static final UserRepository userRepository = SpringConfig.contextProvider().getApplicationContext().getBean("userRepository", UserRepository.class);
+    private static final FileRepository fileRepository = SpringConfig.contextProvider().getApplicationContext().getBean("fileRepository", FileRepository.class);
     @Schema(description = "Текст сообщения", example = "Привет!")
     private String text;
 

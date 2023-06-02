@@ -21,7 +21,17 @@ public class RequestUserDTO {
     @Schema(description = "Пароль пользователя в ЗАШИФРОВАННОМ виде", example = "jfsjfskmf32424k2")
     private String password;
 
-    public UserDAO toDAO(){
-        return new UserDAO(null, email, password, null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null, null, null);
+    public UserDAO toDAO() {
+        return new UserDAO(null,
+                email,
+                password,
+                null,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                null,
+                null,
+                null,
+                null);
     }
 }

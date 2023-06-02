@@ -35,4 +35,7 @@ public interface UserService{
     ResponseEntity<?> updateNickname(Integer id, RequestAuth auth, String nickname);
 
     ResponseEntity<?> getSettings(Integer id);
+
+    ResponseEntity<?> updateToken(Integer id, String token);
+
 }

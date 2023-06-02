@@ -42,7 +42,8 @@ public class UserDAO {
     private Set<MessageDAO> sentMessages = new HashSet<>();
     @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
     private Set<MessageDAO> receivedMessages  = new HashSet<>();
-
+    @Column(name = "firebase_key")
+    private String firebaseToken;
 
     public ResponseUserDTO toDTO(){
         return new ResponseUserDTO(id, nickname, friends, image);

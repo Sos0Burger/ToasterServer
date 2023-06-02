@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @EnableWebMvc
-public class SpringConfiguration {
+public class SpringConfig {
     @Bean
     public static AppContextProvider contextProvider() {
         return new AppContextProvider();

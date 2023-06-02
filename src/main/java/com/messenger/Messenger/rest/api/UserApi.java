@@ -168,4 +168,8 @@ public interface UserApi {
     @Operation(summary = "Получить текущие настройки")
     @GetMapping("/{id}/settings")
     ResponseEntity<?> getSettings(@PathVariable("id") Integer id);
+
+    @Operation(summary = "Обновить токен Firebase")
+    @PutMapping("{id}/firebase")
+    ResponseEntity<?> updateFirebaseToken(@PathVariable("id") Integer id, @RequestBody String token);
 }

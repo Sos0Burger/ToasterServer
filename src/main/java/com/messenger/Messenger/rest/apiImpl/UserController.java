@@ -89,5 +89,10 @@ public class UserController implements UserApi {
         return userService.getSettings(id);
     }
 
+    @Override
+    public ResponseEntity<?> updateFirebaseToken(Integer id, String token) {
+        return userService.updateToken(id, token);
+    }
+
 
 }
