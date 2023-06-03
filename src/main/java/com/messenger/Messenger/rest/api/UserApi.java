@@ -171,5 +171,5 @@ public interface UserApi {
 
     @Operation(summary = "Обновить токен Firebase")
     @PutMapping("{id}/firebase")
-    ResponseEntity<?> updateFirebaseToken(@PathVariable("id") Integer id, @RequestBody String token);
+    ResponseEntity<?> updateFirebaseToken(@PathVariable("id") Integer id, @RequestParam String token);
 }

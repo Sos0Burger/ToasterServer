@@ -42,7 +42,8 @@ public class MessageServiceImpl implements MessageService {
 
                 Integer id = messageRepository.save(message.toDAO()).getId();
                 MessageDAO messageDAO = messageRepository.findById(id).get();
-                Call<ResponseBody> response = firebaseApi.sendNotification(new NotificationContent(messageDAO.getReceiver().getFirebaseToken(), messageDAO.toDTO()));
+                NotificationContent notificationContent = new NotificationContent(messageDAO.getReceiver().getFirebaseToken(), messageDAO.toDTO());
+                Call<ResponseBody> response = firebaseApi.sendNotification(notificationContent);
                 response.enqueue(new Callback<ResponseBody>(){
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
