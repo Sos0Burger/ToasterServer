@@ -13,7 +13,7 @@ public class FriendDTO {
 
     Integer id;
     @Schema(description = "Отображаемое имя", example = "NAGIBATOR228", nullable = true)
-    private String nickName;
+    private String nickname;
 
     @Schema(description = "Аватар профиля", example = "https://i.imgur.com/AD3MbBi.jpeg", nullable = true)
     private String image;
