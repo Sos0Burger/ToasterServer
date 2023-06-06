@@ -60,7 +60,7 @@ public class MessageServiceImpl implements MessageService {
                         System.out.println(throwable.getMessage());
                     }
                 } );
-                return new ResponseEntity<>(HttpStatus.CREATED);
+                return new ResponseEntity<>(messageDAO.toDTO(),HttpStatus.CREATED);
             }
             return new ResponseEntity<>(new ExceptionMessage("Файла с таким ID не существует"), HttpStatus.NOT_FOUND);
         }
