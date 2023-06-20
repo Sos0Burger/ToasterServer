@@ -45,6 +45,9 @@ public class UserDAO {
     @Column(name = "firebase_key")
     private String firebaseToken;
 
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+    private Set<PostDAO> posts = new HashSet<>();
+
     public ResponseUserDTO toDTO(){
         return new ResponseUserDTO(id, nickname, friends, image);
     }
