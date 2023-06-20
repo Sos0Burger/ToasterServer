@@ -31,6 +31,6 @@ public class MessageController implements MessageApi {
 
     @Override
     public ResponseEntity<?> getDialog(Integer userid, Integer companionid, Integer page) {
-        return messageService.getDialog(userid, companionid, (Pageable) PageRequest.of(page, 15, Sort.by(Sort.Direction.DESC, "date")));
+        return messageService.getDialog(userid, companionid, PageRequest.of(page, 15, Sort.by(Sort.Direction.DESC, "date")));
     }
 }

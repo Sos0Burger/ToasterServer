@@ -23,7 +23,7 @@ public class PostDAO {
     private Integer id;
 
     @Column(name = "text")
-    String text;
+    private String text;
 
     @ManyToOne
     @JoinColumn(name="creator", nullable=false)
