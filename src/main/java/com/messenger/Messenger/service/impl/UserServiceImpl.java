@@ -34,7 +34,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> getUser(Integer id) {
         if (userRepository.existsById(id)) {
-            return new ResponseEntity<>(userRepository.findById(id).get().toUserSettingsDTO(), HttpStatus.OK);
+            UserDAO userDAO = userRepository.findById(id).get();
+            List<FriendDTO> friendDTOs = new ArrayList<>();
+            for (var item: userDAO.getFriends()
+                 ) {
+                friendDTOs.add(userRepository.findById(item).get().toFriendDTO());
+            }
+
+            return new ResponseEntity<>(friendDTOs, HttpStatus.OK);
         }
         return new ResponseEntity<>(new ExceptionMessage("Пользователь не найден"), HttpStatus.NOT_FOUND);
     }
@@ -45,7 +52,12 @@ public class UserServiceImpl implements UserService {
         List<ResponseUserDTO> DTOlist = new ArrayList<>();
         for (UserDAO user : DAOlist
         ) {
-            DTOlist.add(user.toDTO());
+            List<FriendDTO> friendDTOs = new ArrayList<>();
+            for (var item: user.getFriends()
+            ) {
+                friendDTOs.add(userRepository.findById(item).get().toFriendDTO());
+            }
+            DTOlist.add(user.toDTO(friendDTOs));
         }
         return new ResponseEntity<>(DTOlist, HttpStatus.OK);
     }
@@ -69,37 +81,6 @@ public class UserServiceImpl implements UserService {
         }
         return new ResponseEntity<>(new ExceptionMessage("Аккаунт не найден"), HttpStatus.NOT_FOUND);
     }
-
-    @Override
-    public ResponseEntity<?> findByIds(List<Integer> ids) {
-        List<UserDAO> DAOlist = new ArrayList<>();
-        for (Integer item : ids
-        ) {
-            if (userRepository.existsById(item)) {
-                DAOlist.add(userRepository.findById(item).get());
-            } else {
-                DAOlist.add(new UserDAO(-1,
-                        null,
-                        null,
-                        "Удаленный пользователь",
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null));
-            }
-        }
-        List<ResponseUserDTO> DTOlist = new ArrayList<>();
-        for (UserDAO user : DAOlist
-        ) {
-            DTOlist.add(user.toDTO());
-        }
-        return new ResponseEntity<>(DTOlist, HttpStatus.OK);
-    }
-
     @Override
     public ResponseEntity<?> sendFriendRequest(Integer senderid, Integer receiverid) {
         if (userRepository.existsById(senderid) && userRepository.existsById(receiverid)) {

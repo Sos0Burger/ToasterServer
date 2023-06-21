@@ -79,10 +79,6 @@ public interface UserApi {
     @GetMapping("/auth")
     ResponseEntity<?> auth(@RequestHeader(value = "email") String email, @RequestHeader(value = "hash") String hash);
 
-    @Operation(summary = "Получение данных группы пользователей")
-    @GetMapping("/ids")
-    ResponseEntity<?> getByIds(@RequestParam List<Integer> ids);
-
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",

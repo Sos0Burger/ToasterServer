@@ -45,11 +45,6 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<?> getByIds(List<Integer> ids) {
-        return userService.findByIds(ids);
-    }
-
-    @Override
     public ResponseEntity<?> sendFriendRequest(Integer senderid, Integer receiverid) {
         return userService.sendFriendRequest(senderid, receiverid);
     }

@@ -18,7 +18,6 @@ public interface UserService{
     ResponseEntity<?> delete(Integer id);
 
     ResponseEntity<?> auth(RequestAuth auth);
-    ResponseEntity<?> findByIds(List<Integer> ids);
 
     ResponseEntity<?> sendFriendRequest(Integer senderid, Integer receiverid);
 

@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,8 +49,8 @@ public class UserDAO {
     @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
     private Set<PostDAO> posts = new HashSet<>();
 
-    public ResponseUserDTO toDTO(){
-        return new ResponseUserDTO(id, nickname, friends, image);
+    public ResponseUserDTO toDTO(List<FriendDTO> friendDTOs){
+        return new ResponseUserDTO(id, nickname, friendDTOs , image);
     }
 
     public FriendDTO toFriendDTO(){
