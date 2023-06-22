@@ -1,5 +1,6 @@
 package com.messenger.Messenger.rest.apiImpl;
 
+import com.messenger.Messenger.dto.rq.RequestPostDTO;
 import com.messenger.Messenger.rest.api.PostApi;
 import com.messenger.Messenger.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +23,10 @@ public class PostController implements PostApi {
     @Override
     public ResponseEntity<?> getPosts(Integer id, Integer page) {
         return postService.getPosts(id, PageRequest.of(page, 15, Sort.by(Sort.Direction.DESC, "date")));
+    }
+
+    @Override
+    public ResponseEntity<?> createPost(RequestPostDTO postDTO) {
+        return postService.createPost(postDTO);
     }
 }
