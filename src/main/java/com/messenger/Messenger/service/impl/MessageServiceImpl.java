@@ -83,9 +83,8 @@ public class MessageServiceImpl implements MessageService {
         if (userRepository.existsById(userid) && userRepository.existsById(companionid)) {
             var user = userRepository.findById(userid).get();
             var companion = userRepository.findById(companionid).get();
-            List<MessageDAO> messageDAOS = new ArrayList<>();
             //находим все сообщение между ними
-            messageDAOS.addAll(messageRepository.findBySenderAndReceiver(user, companion, pageable).getContent());
+            List<MessageDAO> messageDAOS = new ArrayList<>(messageRepository.findBySenderAndReceiver(user, companion, pageable).getContent());
 
             List<ResponseMessageDTO> messageDTOS = new ArrayList<>();
             for (MessageDAO message : messageDAOS
