@@ -75,7 +75,6 @@ public class MessageServiceImpl implements MessageService {
         ) {
             DTOs.add(message.toDTO());
         }
-        messages.forEach(MessageDAO::toDTO);
         return new ResponseEntity<>(DTOs, HttpStatus.OK);
     }
 
