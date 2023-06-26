@@ -5,11 +5,13 @@ import com.messenger.Messenger.dto.rq.NotificationContent;
 import com.messenger.Messenger.dto.rq.RequestMessageDTO;
 import com.messenger.Messenger.dto.rs.ResponseMessageDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
+import com.messenger.Messenger.exception.NotFoundException;
 import com.messenger.Messenger.repository.FileRepository;
 import com.messenger.Messenger.repository.MessageRepository;
 import com.messenger.Messenger.repository.UserRepository;
 import com.messenger.Messenger.retrofit.FirebaseApiImpl;
 import com.messenger.Messenger.service.MessageService;
+import lombok.SneakyThrows;
 import okhttp3.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -35,8 +37,9 @@ public class MessageServiceImpl implements MessageService {
 
     FirebaseApiImpl firebaseApi = new FirebaseApiImpl();
 
+    @SneakyThrows
     @Override
-    public ResponseEntity<?> create(RequestMessageDTO message) {
+    public MessageDAO create(RequestMessageDTO message) {
         if (userRepository.existsById(message.getSender()) && userRepository.existsById(message.getReceiver())) {
             if (fileRepository.findAllById(message.getAttachments()).size() == message.getAttachments().size()) {
 
@@ -60,40 +63,26 @@ public class MessageServiceImpl implements MessageService {
                         System.out.println(throwable.getMessage());
                     }
                 } );
-                return new ResponseEntity<>(messageDAO.toDTO(),HttpStatus.CREATED);
+                return messageDAO;
             }
-            return new ResponseEntity<>(new ExceptionMessage("Файла с таким ID не существует"), HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Файла с таким ID не существует");
         }
-        return new ResponseEntity<>(new ExceptionMessage("Пользователя с таким ID не существует"), HttpStatus.NOT_FOUND);
+        throw new NotFoundException("Пользователя с таким ID не существует");
     }
 
     @Override
-    public ResponseEntity<?> getAll() {
-        var messages = messageRepository.findAll();
-        List<ResponseMessageDTO> DTOs = new ArrayList<>();
-        for (MessageDAO message : messages
-        ) {
-            DTOs.add(message.toDTO());
-        }
-        return new ResponseEntity<>(DTOs, HttpStatus.OK);
+    public List<MessageDAO> getAll() {
+        return messageRepository.findAll();
     }
 
+    @SneakyThrows
     @Override
-    public ResponseEntity<?> getDialog(Integer userid, Integer companionid, Pageable pageable) {
+    public List<MessageDAO> getDialog(Integer userid, Integer companionid, Pageable pageable) {
         if (userRepository.existsById(userid) && userRepository.existsById(companionid)) {
             var user = userRepository.findById(userid).get();
             var companion = userRepository.findById(companionid).get();
-            //находим все сообщение между ними
-            List<MessageDAO> messageDAOS = new ArrayList<>(messageRepository.findBySenderAndReceiver(user, companion, pageable).getContent());
-
-            List<ResponseMessageDTO> messageDTOS = new ArrayList<>();
-            for (MessageDAO message : messageDAOS
-            ) {
-                messageDTOS.add(message.toDTO());
-            }
-            messageDTOS.sort(Comparator.comparing(ResponseMessageDTO::getDate).reversed());
-            return new ResponseEntity<>(messageDTOS, HttpStatus.OK);
+            return new ArrayList<>(messageRepository.findBySenderAndReceiver(user, companion, pageable).getContent());
         }
-        return new ResponseEntity<>(new ExceptionMessage("Пользователя с таким ID не существует"), HttpStatus.NOT_FOUND);
+        throw new NotFoundException("Пользователя с таким ID не существует");
     }
 }
