@@ -1,12 +1,15 @@
 package com.messenger.Messenger.service;
 
+import com.messenger.Messenger.dao.PostDAO;
 import com.messenger.Messenger.dto.rq.RequestPostDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface PostService {
 
-    ResponseEntity<?> getPosts(Integer userid, Pageable pageable);
+    List<PostDAO> getPosts(Integer userid, Pageable pageable);
 
-    ResponseEntity<?> createPost(RequestPostDTO postDTO);
+    PostDAO createPost(RequestPostDTO postDTO);
  }

@@ -6,10 +6,12 @@ import com.messenger.Messenger.dao.UserDAO;
 import com.messenger.Messenger.dto.rq.RequestPostDTO;
 import com.messenger.Messenger.dto.rs.ResponsePostDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
+import com.messenger.Messenger.exception.NotFoundException;
 import com.messenger.Messenger.repository.FileRepository;
 import com.messenger.Messenger.repository.PostRepository;
 import com.messenger.Messenger.repository.UserRepository;
 import com.messenger.Messenger.service.PostService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,33 +37,27 @@ public class PostServiceImpl implements PostService {
     private FileRepository fileRepository;
 
 
+    @SneakyThrows
     @Override
-    public ResponseEntity<?> getPosts(Integer userid, Pageable pageable) {
+    public List<PostDAO> getPosts(Integer userid, Pageable pageable) {
         if(userRepository.existsById(userid)){
-            List<PostDAO> posts = postRepository
+            return postRepository
                     .findByCreator(userRepository.findById(userid).get(), pageable)
                     .getContent();
-            List<ResponsePostDTO> postDTOs = new ArrayList<>();
-
-            for (var item: posts
-                 ) {
-                postDTOs.add(item.toDTO());
-            }
-            return new ResponseEntity<>(postDTOs, HttpStatus.OK);
         }
-        return new ResponseEntity<>(new ExceptionMessage("Файла с таким ID не существует"), HttpStatus.NOT_FOUND);
+        throw new NotFoundException("Файла с таким ID не существует");
     }
 
+    @SneakyThrows
     @Override
-    public ResponseEntity<?> createPost(RequestPostDTO postDTO) {
+    public PostDAO createPost(RequestPostDTO postDTO) {
         if(userRepository.existsById(postDTO.getCreator())) {
             UserDAO creator = userRepository.findById(postDTO.getCreator()).get();
 
             Set<FileDAO> attachments = new HashSet<>(fileRepository.findAllById(postDTO.getAttachments()));
-            PostDAO postDAO = postRepository.save(postDTO.toDAO(creator, attachments));
-            return new ResponseEntity<>(postDAO.toDTO(), HttpStatus.CREATED);
+            return postRepository.save(postDTO.toDAO(creator, attachments));
         }
 
-        return new ResponseEntity<>(new ExceptionMessage("Файла с таким ID не существует"), HttpStatus.NOT_FOUND);
+        throw new NotFoundException("Пользователя с таким ID не существует");
     }
 }
