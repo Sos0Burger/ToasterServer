@@ -1,5 +1,6 @@
 package com.messenger.Messenger.rest.api;
 
+import com.messenger.Messenger.dto.rs.ResponseFileDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -22,7 +23,7 @@ public interface FileApi {
                     content = @Content(schema = @Schema(implementation = ExceptionMessage.class))
             )
     })
-    ResponseEntity<?> upload(@RequestPart MultipartFile attachment);
+    ResponseEntity<ResponseFileDTO> upload(@RequestPart MultipartFile attachment);
 
     @Operation(summary = "Получение файла по ID")
     @GetMapping(value = "/{id}")
@@ -33,5 +34,5 @@ public interface FileApi {
                     content = @Content(schema = @Schema(implementation = ExceptionMessage.class))
             )
     })
-    ResponseEntity<?> getFile(@PathVariable Integer id);
+    ResponseEntity<byte[]> getFile(@PathVariable Integer id);
 }

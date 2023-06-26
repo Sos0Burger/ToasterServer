@@ -2,8 +2,12 @@ package com.messenger.Messenger.service.impl;
 
 import com.messenger.Messenger.dao.FileDAO;
 import com.messenger.Messenger.exception.ExceptionMessage;
+import com.messenger.Messenger.exception.NotFoundException;
+import com.messenger.Messenger.exception.UploadException;
 import com.messenger.Messenger.repository.FileRepository;
 import com.messenger.Messenger.service.FileService;
+import lombok.SneakyThrows;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,20 +23,23 @@ public class FileServiceImpl implements FileService {
     @Autowired
     private FileRepository fileRepository;
 
+    @SneakyThrows
     @Override
-    public ResponseEntity<?> save(MultipartFile attachment) throws IOException {
-        return new ResponseEntity<>(fileRepository.save(new FileDAO(null, attachment.getName(), attachment.getContentType(), attachment.getBytes())).toDTO(),
-        HttpStatus.CREATED);
+    public FileDAO save(MultipartFile attachment){
+        try {
+            return fileRepository.save(new FileDAO(null, attachment.getName(), attachment.getContentType(), attachment.getBytes()));
+        } catch (IOException e) {
+            throw new UploadException("Ошибка загрузки файлов");
+        }
     }
 
+    @SneakyThrows
     @Override
-    public ResponseEntity<?> findById(Integer id) {
+    public FileDAO findById(Integer id) {
         //Существует ли файл
         if (fileRepository.existsById(id)) {
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.add("Content-Type", fileRepository.findById(id).get().getType());
-            return new ResponseEntity<>(fileRepository.findById(id).get().getData(), responseHeaders, HttpStatus.OK);
+            return fileRepository.findById(id).get();
         }
-        return new ResponseEntity<>(new ExceptionMessage("Файла с таким id не существует"), HttpStatus.NOT_FOUND);
+        throw new NotFoundException("Файла с таким id не существует");
     }
 }
