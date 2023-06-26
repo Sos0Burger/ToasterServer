@@ -3,7 +3,6 @@ package com.messenger.Messenger.service;
 import com.messenger.Messenger.dao.UserDAO;
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 

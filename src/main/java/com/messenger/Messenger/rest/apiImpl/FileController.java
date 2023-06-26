@@ -2,7 +2,6 @@ package com.messenger.Messenger.rest.apiImpl;
 
 import com.messenger.Messenger.dao.FileDAO;
 import com.messenger.Messenger.dto.rs.ResponseFileDTO;
-import com.messenger.Messenger.exception.ExceptionMessage;
 import com.messenger.Messenger.exception.UploadException;
 import com.messenger.Messenger.rest.api.FileApi;
 import com.messenger.Messenger.service.FileService;

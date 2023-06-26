@@ -4,7 +4,6 @@ import com.messenger.Messenger.dto.rq.RequestPostDTO;
 import com.messenger.Messenger.dto.rs.ResponsePostDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import retrofit2.http.Body;
 
 import java.util.List;
 

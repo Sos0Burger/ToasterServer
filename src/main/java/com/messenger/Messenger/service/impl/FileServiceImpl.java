@@ -1,17 +1,12 @@
 package com.messenger.Messenger.service.impl;
 
 import com.messenger.Messenger.dao.FileDAO;
-import com.messenger.Messenger.exception.ExceptionMessage;
 import com.messenger.Messenger.exception.NotFoundException;
 import com.messenger.Messenger.exception.UploadException;
 import com.messenger.Messenger.repository.FileRepository;
 import com.messenger.Messenger.service.FileService;
 import lombok.SneakyThrows;
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

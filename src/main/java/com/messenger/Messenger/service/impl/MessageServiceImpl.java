@@ -3,8 +3,6 @@ package com.messenger.Messenger.service.impl;
 import com.messenger.Messenger.dao.MessageDAO;
 import com.messenger.Messenger.dto.rq.NotificationContent;
 import com.messenger.Messenger.dto.rq.RequestMessageDTO;
-import com.messenger.Messenger.dto.rs.ResponseMessageDTO;
-import com.messenger.Messenger.exception.ExceptionMessage;
 import com.messenger.Messenger.exception.NotFoundException;
 import com.messenger.Messenger.repository.FileRepository;
 import com.messenger.Messenger.repository.MessageRepository;
@@ -15,15 +13,12 @@ import lombok.SneakyThrows;
 import okhttp3.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -35,7 +30,7 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private FileRepository fileRepository;
 
-    FirebaseApiImpl firebaseApi = new FirebaseApiImpl();
+    final FirebaseApiImpl firebaseApi = new FirebaseApiImpl();
 
     @SneakyThrows
     @Override

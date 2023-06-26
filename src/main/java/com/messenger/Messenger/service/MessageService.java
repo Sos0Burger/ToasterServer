@@ -3,7 +3,6 @@ package com.messenger.Messenger.service;
 import com.messenger.Messenger.dao.MessageDAO;
 import com.messenger.Messenger.dto.rq.RequestMessageDTO;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
