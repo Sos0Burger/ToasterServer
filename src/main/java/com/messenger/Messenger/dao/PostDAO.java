@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.util.*;
 
 @Entity
-@Table(name = "messages")
+@Table(name = "posts")
 @Getter
 @Setter
 @NoArgsConstructor

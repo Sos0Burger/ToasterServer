@@ -12,5 +12,5 @@ public interface PostApi {
     ResponseEntity<?> getPosts(@PathVariable("id")Integer id, @RequestParam("page") Integer page);
 
     @PostMapping("/post")
-    ResponseEntity<?> createPost(@Body RequestPostDTO postDTO);
+    ResponseEntity<?> createPost(@RequestBody RequestPostDTO postDTO);
 }

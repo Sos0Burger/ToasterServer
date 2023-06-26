@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
                 friendDTOs.add(userRepository.findById(item).get().toFriendDTO());
             }
 
-            return new ResponseEntity<>(friendDTOs, HttpStatus.OK);
+            return new ResponseEntity<>(userDAO.toDTO(friendDTOs), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ExceptionMessage("Пользователь не найден"), HttpStatus.NOT_FOUND);
     }
