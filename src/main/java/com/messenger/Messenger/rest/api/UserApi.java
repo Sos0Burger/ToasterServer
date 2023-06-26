@@ -2,7 +2,9 @@ package com.messenger.Messenger.rest.api;
 
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
+import com.messenger.Messenger.dto.rs.FriendDTO;
 import com.messenger.Messenger.dto.rs.ResponseUserDTO;
+import com.messenger.Messenger.dto.rs.UserSettingsDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -32,33 +34,11 @@ public interface UserApi {
     })
     @Operation(summary = "Создание пользователя")
     @PostMapping
-    ResponseEntity<?> create(@Validated @RequestBody RequestUserDTO requestUserDTO);
+    ResponseEntity<ResponseUserDTO> create(@Validated @RequestBody RequestUserDTO requestUserDTO);
 
     @Operation(summary = "Получение данных пользователя")
     @GetMapping("/{id}")
-    ResponseEntity<?> getUser(@PathVariable("id") Integer id);
-
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Список всех пользователей",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    array = @ArraySchema(
-                                            schema = @Schema(
-                                                    implementation = ResponseUserDTO.class)
-                                    )
-                            )
-                    })
-    })
-    @Operation(summary = "Получение всех пользователей")
-    @GetMapping
-    ResponseEntity<?> getAll();
-
-    @Operation(summary = "Удаление пользователя по id")
-    @DeleteMapping("{id}")
-    ResponseEntity<?> delete(@PathVariable(name = "id") Integer id);
+    ResponseEntity<ResponseUserDTO> getUser(@PathVariable("id") Integer id);
 
     @ApiResponses({
             @ApiResponse(
@@ -77,7 +57,7 @@ public interface UserApi {
     })
     @Operation(summary = "Авторизация")
     @GetMapping("/auth")
-    ResponseEntity<?> auth(@RequestHeader(value = "email") String email, @RequestHeader(value = "hash") String hash);
+    ResponseEntity<Integer> auth(@RequestHeader(value = "email") String email, @RequestHeader(value = "hash") String hash);
 
     @ApiResponses({
             @ApiResponse(
@@ -102,7 +82,7 @@ public interface UserApi {
     })
     @Operation(summary = "Отправка заявки в друзья")
     @PostMapping("/friend-request/{senderid}/{receiverid}")
-    ResponseEntity<?> sendFriendRequest(@PathVariable(name = "senderid") Integer senderid, @PathVariable(name = "receiverid") Integer receiverid);
+    ResponseEntity<FriendDTO> sendFriendRequest(@PathVariable(name = "senderid") Integer senderid, @PathVariable(name = "receiverid") Integer receiverid);
 
     @ApiResponses({
             @ApiResponse(
@@ -118,7 +98,7 @@ public interface UserApi {
     })
     @Operation(summary = "Принять запрос в друзья")
     @PostMapping("/friends/{receiverid}/{senderid}")
-    ResponseEntity<?> acceptFriendRequest(@PathVariable(name = "receiverid") Integer receiverid, @PathVariable(name = "senderid") Integer senderid);
+    ResponseEntity<FriendDTO> acceptFriendRequest(@PathVariable(name = "receiverid") Integer receiverid, @PathVariable(name = "senderid") Integer senderid);
 
     @ApiResponses({
             @ApiResponse(
@@ -143,15 +123,15 @@ public interface UserApi {
     })
     @Operation(summary = "Список друзей")
     @GetMapping("/{id}/friends")
-    ResponseEntity<?> getFriends(@PathVariable("id") Integer id);
+    ResponseEntity<List<FriendDTO>> getFriends(@PathVariable("id") Integer id);
 
     @Operation(summary = "Получить список входящих заявок")
     @GetMapping("/{id}/pending")
-    ResponseEntity<?> getPending(@PathVariable("id") Integer id);
+    ResponseEntity<List<FriendDTO>> getPending(@PathVariable("id") Integer id);
 
     @Operation(summary = "Получить список исходящих заявок")
     @GetMapping("/{id}/sent")
-    ResponseEntity<?> getSent(@PathVariable("id") Integer id);
+    ResponseEntity<List<FriendDTO>> getSent(@PathVariable("id") Integer id);
 
     @Operation(summary = "Обновить данные пользователя")
     @PutMapping("/{id}/picture")
@@ -163,7 +143,7 @@ public interface UserApi {
 
     @Operation(summary = "Получить текущие настройки")
     @GetMapping("/{id}/settings")
-    ResponseEntity<?> getSettings(@PathVariable("id") Integer id);
+    ResponseEntity<UserSettingsDTO> getSettings(@PathVariable("id") Integer id);
 
     @Operation(summary = "Обновить токен Firebase")
     @PutMapping("{id}/firebase")

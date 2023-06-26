@@ -1,40 +1,34 @@
 package com.messenger.Messenger.service;
 
+import com.messenger.Messenger.dao.UserDAO;
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
-import com.messenger.Messenger.dto.rs.ResponseUserDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 
 public interface UserService{
-    ResponseEntity<?> create(RequestUserDTO requestUserDTO);
+    UserDAO create(RequestUserDTO requestUserDTO);
 
-    ResponseEntity<?> getUser(Integer id);
+    UserDAO getUser(Integer id);
 
-    ResponseEntity<List<ResponseUserDTO>> getAll();
+    Integer auth(RequestAuth auth);
 
-    ResponseEntity<?> delete(Integer id);
+    UserDAO sendFriendRequest(Integer senderid, Integer receiverid);
 
-    ResponseEntity<?> auth(RequestAuth auth);
+    UserDAO acceptFriendRequest(Integer receiverid, Integer senderid);
 
-    ResponseEntity<?> sendFriendRequest(Integer senderid, Integer receiverid);
+    List<UserDAO> getFriends(Integer id);
 
-    ResponseEntity<?> acceptFriendRequest(Integer receiverid, Integer senderid);
+    List<UserDAO> getPending(Integer id);
 
-    ResponseEntity<?> getFriends(Integer id);
+    List<UserDAO> getSent(Integer id);
 
-    ResponseEntity<?> getPending(Integer id);
+    void updatePicture(Integer id, RequestAuth auth, String url);
 
-    ResponseEntity<?> getSent(Integer id);
+    void updateNickname(Integer id, RequestAuth auth, String nickname);
 
-    ResponseEntity<?> updatePicture(Integer id, RequestAuth auth, String url);
-
-    ResponseEntity<?> updateNickname(Integer id, RequestAuth auth, String nickname);
-
-    ResponseEntity<?> getSettings(Integer id);
-
-    ResponseEntity<?> updateToken(Integer id, String token);
+    void updateToken(Integer id, String token);
 
 }
