@@ -1,5 +1,6 @@
 package com.messenger.Messenger.service.impl;
 
+import com.messenger.Messenger.dao.PostDAO;
 import com.messenger.Messenger.dao.UserDAO;
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
@@ -10,6 +11,7 @@ import com.messenger.Messenger.repository.UserRepository;
 import com.messenger.Messenger.service.UserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -166,5 +168,10 @@ public class UserServiceImpl implements UserService {
         UserDAO user = getUser(id);
         user.setFirebaseToken(token);
         userRepository.save(user);
+    }
+
+    @Override
+    public List<PostDAO> getFeed(Integer id, Pageable page) {
+        return getUser(id).getFeed().stream().toList();
     }
 }

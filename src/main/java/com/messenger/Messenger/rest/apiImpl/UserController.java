@@ -4,11 +4,14 @@ import com.messenger.Messenger.dao.UserDAO;
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
 import com.messenger.Messenger.dto.rs.FriendDTO;
+import com.messenger.Messenger.dto.rs.ResponsePostDTO;
 import com.messenger.Messenger.dto.rs.ResponseUserDTO;
 import com.messenger.Messenger.dto.rs.UserSettingsDTO;
 import com.messenger.Messenger.rest.api.UserApi;
 import com.messenger.Messenger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -114,6 +117,16 @@ public class UserController implements UserApi {
     public ResponseEntity<?> updateFirebaseToken(Integer id, String token) {
         userService.updateToken(id, token);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<ResponsePostDTO>> getFeed(Integer id, Integer page) {
+        List<ResponsePostDTO> feed = new ArrayList<>();
+        for (var item: userService.getFeed(id, PageRequest.of(page, 15, Sort.by(Sort.Direction.DESC, "date")))
+             ) {
+            feed.add(item.toDTO());
+        }
+        return new ResponseEntity<>(feed, HttpStatus.OK);
     }
 
 

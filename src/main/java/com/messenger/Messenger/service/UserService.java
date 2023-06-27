@@ -1,8 +1,10 @@
 package com.messenger.Messenger.service;
 
+import com.messenger.Messenger.dao.PostDAO;
 import com.messenger.Messenger.dao.UserDAO;
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -29,5 +31,7 @@ public interface UserService{
     void updateNickname(Integer id, RequestAuth auth, String nickname);
 
     void updateToken(Integer id, String token);
+
+    List<PostDAO> getFeed(Integer id, Pageable page);
 
 }

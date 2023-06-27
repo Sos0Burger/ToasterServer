@@ -3,6 +3,7 @@ package com.messenger.Messenger.rest.api;
 import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
 import com.messenger.Messenger.dto.rs.FriendDTO;
+import com.messenger.Messenger.dto.rs.ResponsePostDTO;
 import com.messenger.Messenger.dto.rs.ResponseUserDTO;
 import com.messenger.Messenger.dto.rs.UserSettingsDTO;
 import com.messenger.Messenger.exception.ExceptionMessage;
@@ -148,4 +149,8 @@ public interface UserApi {
     @Operation(summary = "Обновить токен Firebase")
     @PutMapping("{id}/firebase")
     ResponseEntity<?> updateFirebaseToken(@PathVariable("id") Integer id, @RequestParam String token);
+
+    @Operation(summary = "Получить новости")
+    @GetMapping("/{id}/feed")
+    ResponseEntity<List<ResponsePostDTO>> getFeed(@PathVariable("id") Integer id, @RequestParam("page") Integer page);
 }

@@ -47,8 +47,8 @@ public class PostServiceImpl implements PostService {
     public PostDAO createPost(RequestPostDTO postDTO) {
         if(userRepository.existsById(postDTO.getCreator())) {
             UserDAO creator = userRepository.findById(postDTO.getCreator()).get();
-
             Set<FileDAO> attachments = new HashSet<>(fileRepository.findAllById(postDTO.getAttachments()));
+            //todo добавить добавление в ленту
             return postRepository.save(postDTO.toDAO(creator, attachments));
         }
 
