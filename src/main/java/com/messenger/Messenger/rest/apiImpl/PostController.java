@@ -18,9 +18,9 @@ import java.util.List;
 @RestController
 public class PostController implements PostApi {
 
-    @Autowired
     private final PostService postService;
 
+    @Autowired
     public PostController(PostService postService) {
         this.postService = postService;
     }
