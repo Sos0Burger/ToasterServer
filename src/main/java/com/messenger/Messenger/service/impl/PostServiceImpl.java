@@ -54,7 +54,7 @@ public class PostServiceImpl implements PostService {
         for (var item: creator.getFriends()
              ) {
             UserDAO userDAO = userService.getUser(item);
-            userDAO.getPosts().add(post);
+            userDAO.getFeed().add(post);
             userRepository.save(userDAO);
         }
         return post;
