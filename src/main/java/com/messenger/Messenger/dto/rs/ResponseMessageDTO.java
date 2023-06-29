@@ -14,12 +14,12 @@ public class ResponseMessageDTO {
     @Schema(description = "Текст сообщения", example = "Привет!")
     private String text;
 
-    FriendDTO sender;
+    private FriendDTO sender;
 
-    FriendDTO receiver;
+    private FriendDTO receiver;
 
     @Schema(description = "Дата сообщения", example = "1684789200000")
     private Long date;
 
-    List<ResponseFileDTO> attachments;
+    private List<ResponseFileDTO> attachments;
 }

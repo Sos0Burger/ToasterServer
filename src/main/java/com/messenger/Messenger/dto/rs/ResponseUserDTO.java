@@ -13,9 +13,9 @@ import java.util.List;
 public class ResponseUserDTO {
     Integer id;
     @Schema(description = "Отображаемое имя", example = "NAGIBATOR228")
-    private String nickName;
-    @Schema(description = "Список друзей", example = "1,2,4")
-    private List<Integer> friendsList;
+    private String nickname;
+    @Schema(description = "Список друзей")
+    private List<FriendDTO> friends;
     @Schema(description = "Аватар профиля", example = "https://i.imgur.com/AD3MbBi.jpeg")
     private String image;
 }

@@ -6,7 +6,7 @@ import retrofit2.Call;
 
 
 public class FirebaseApiImpl implements FirebaseApi{
-    static FirebaseApi firebaseApi = RetrofitClient.getInstance().create(FirebaseApi.class);
+    static final FirebaseApi firebaseApi = RetrofitClient.getInstance().create(FirebaseApi.class);
     @Override
     public Call<ResponseBody> sendNotification(NotificationContent notificationContent) {
         return firebaseApi.sendNotification(notificationContent);

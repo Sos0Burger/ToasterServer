@@ -38,15 +38,25 @@ public class UserDAO {
     private List<Integer> sent;
     @Column(name = "image")
     private String image;
+    @Column(name = "sent_messages")
     @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
     private Set<MessageDAO> sentMessages = new HashSet<>();
+    @Column(name = "received_messages")
     @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
     private Set<MessageDAO> receivedMessages  = new HashSet<>();
     @Column(name = "firebase_key")
     private String firebaseToken;
 
-    public ResponseUserDTO toDTO(){
-        return new ResponseUserDTO(id, nickname, friends, image);
+    @Column(name = "posts")
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+    private Set<PostDAO> posts = new HashSet<>();
+
+    @Column
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private Set<PostDAO> feed = new HashSet<>();
+    public ResponseUserDTO toDTO(List<FriendDTO> friendDTOs){
+        return new ResponseUserDTO(id, nickname, friendDTOs , image);
     }
 
     public FriendDTO toFriendDTO(){
