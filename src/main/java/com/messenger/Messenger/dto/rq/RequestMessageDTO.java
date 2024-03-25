@@ -4,7 +4,7 @@ import com.messenger.Messenger.config.SpringConfig;
 import com.messenger.Messenger.dao.FileDAO;
 import com.messenger.Messenger.dao.MessageDAO;
 import com.messenger.Messenger.repository.FileRepository;
-import com.messenger.Messenger.repository.UserRepository;
+import com.messenger.Messenger.repository.UserProfileRepository;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -22,7 +22,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestMessageDTO {
-    private static final UserRepository userRepository = SpringConfig.contextProvider().getApplicationContext().getBean("userRepository", UserRepository.class);
+    private static final UserProfileRepository USER_PROFILE_REPOSITORY = SpringConfig.contextProvider().getApplicationContext().getBean("userRepository", UserProfileRepository.class);
     private static final FileRepository fileRepository = SpringConfig.contextProvider().getApplicationContext().getBean("fileRepository", FileRepository.class);
     @Schema(description = "Текст сообщения", example = "Привет!")
     private String text;
@@ -46,6 +46,6 @@ public class RequestMessageDTO {
              ) {
             fileDAOS.add(fileRepository.findById(id).get());
         }
-        return new MessageDAO(null, text, userRepository.findById(sender).get(), userRepository.findById(receiver).get(),new Date(date), fileDAOS);
+        return new MessageDAO(null, text, USER_PROFILE_REPOSITORY.findById(sender).get(), USER_PROFILE_REPOSITORY.findById(receiver).get(),new Date(date), fileDAOS);
     }
 }

@@ -1,4 +1,4 @@
-package com.messenger.Messenger.rest.apiImpl;
+package com.messenger.Messenger.rest.controller;
 
 import com.messenger.Messenger.dao.PostDAO;
 import com.messenger.Messenger.dto.rq.RequestPostDTO;

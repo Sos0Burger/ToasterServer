@@ -1,4 +1,4 @@
-package com.messenger.Messenger.rest.apiImpl;
+package com.messenger.Messenger.rest.controller;
 
 import com.messenger.Messenger.dao.FileDAO;
 import com.messenger.Messenger.dto.rs.ResponseFileDTO;

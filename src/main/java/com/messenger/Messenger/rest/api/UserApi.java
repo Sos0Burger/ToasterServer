@@ -1,19 +1,21 @@
 package com.messenger.Messenger.rest.api;
 
-import com.messenger.Messenger.dto.rq.RequestAuth;
 import com.messenger.Messenger.dto.rq.RequestUserDTO;
 import com.messenger.Messenger.dto.rs.FriendDTO;
 import com.messenger.Messenger.dto.rs.ResponsePostDTO;
 import com.messenger.Messenger.dto.rs.ResponseUserDTO;
 import com.messenger.Messenger.dto.rs.UserSettingsDTO;
-import com.messenger.Messenger.exception.ExceptionMessage;
+import com.messenger.Messenger.exception.AlreadyExistsException;
+import com.messenger.Messenger.exception.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,17 +31,22 @@ public interface UserApi {
                     responseCode = "409",
                     description = "Пользователь с такой почтой уже существует",
                     content = {
-                            @Content(schema = @Schema(implementation = ExceptionMessage.class))
+                            @Content(schema = @Schema(implementation = AlreadyExistsException.class))
                     }
             )
     })
     @Operation(summary = "Создание пользователя")
     @PostMapping
-    ResponseEntity<ResponseUserDTO> create(@Validated @RequestBody RequestUserDTO requestUserDTO);
+    ResponseEntity<ResponseUserDTO> create(@RequestParam("token") String token, @Validated @RequestBody RequestUserDTO requestUserDTO);
+
+    @Operation(summary = "Отправить код на почту")
+    @PostMapping("/code")
+    ResponseEntity<HttpStatus> sendCode(@RequestParam("email") String email);
 
     @Operation(summary = "Получение данных пользователя")
-    @GetMapping("/{id}")
-    ResponseEntity<ResponseUserDTO> getUser(@PathVariable("id") Integer id);
+    @GetMapping()
+    @PreAuthorize("hasRole('USER')")
+    ResponseEntity<ResponseUserDTO> getUser();
 
     @ApiResponses({
             @ApiResponse(
@@ -52,13 +59,14 @@ public interface UserApi {
                     responseCode = "404",
                     description = "Аккаунт не найден",
                     content = {
-                            @Content(schema = @Schema(implementation = ExceptionMessage.class))
+                            @Content(schema = @Schema(implementation = NotFoundException.class))
                     }
             )
     })
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Авторизация")
     @GetMapping("/auth")
-    ResponseEntity<Integer> auth(@RequestHeader(value = "email") String email, @RequestHeader(value = "hash") String hash);
+    ResponseEntity<HttpStatus> auth();
 
     @ApiResponses({
             @ApiResponse(
@@ -68,7 +76,7 @@ public interface UserApi {
                     responseCode = "404",
                     description = "Пользователь не найден",
                     content = {
-                            @Content(schema = @Schema(implementation = ExceptionMessage.class))
+                            @Content(schema = @Schema(implementation = NotFoundException.class))
                     }
             ),
             @ApiResponse(
@@ -77,7 +85,7 @@ public interface UserApi {
                             " Вы уже добавили этого пользователя в друзья," +
                             " Иди в дурку проверся(запрос в друзья самому себе)",
                     content = {
-                            @Content(schema = @Schema(implementation = ExceptionMessage.class))
+                            @Content(schema = @Schema(implementation = NotFoundException.class))
                     }
             )
     })
@@ -93,7 +101,7 @@ public interface UserApi {
                     responseCode = "404",
                     description = "Пользователь не отправлял запрос в друзья, Пользователь с таким ID не существует",
                     content = {
-                            @Content(schema = @Schema(implementation = ExceptionMessage.class))
+                            @Content(schema = @Schema(implementation = NotFoundException.class))
                     }
             )
     })
@@ -118,39 +126,39 @@ public interface UserApi {
                     description = "Пользователь не найден",
                     content = {
                             @Content(
-                                    schema = @Schema(implementation = ExceptionMessage.class)
+                                    schema = @Schema(implementation = NotFoundException.class)
                             )
                     })
     })
     @Operation(summary = "Список друзей")
-    @GetMapping("/{id}/friends")
-    ResponseEntity<List<FriendDTO>> getFriends(@PathVariable("id") Integer id);
+    @GetMapping("/friends")
+    ResponseEntity<List<FriendDTO>> getFriends();
 
     @Operation(summary = "Получить список входящих заявок")
-    @GetMapping("/{id}/pending")
-    ResponseEntity<List<FriendDTO>> getPending(@PathVariable("id") Integer id);
+    @GetMapping("/pending")
+    ResponseEntity<List<FriendDTO>> getPending();
 
     @Operation(summary = "Получить список исходящих заявок")
-    @GetMapping("/{id}/sent")
-    ResponseEntity<List<FriendDTO>> getSent(@PathVariable("id") Integer id);
+    @GetMapping("/sent")
+    ResponseEntity<List<FriendDTO>> getSent();
 
     @Operation(summary = "Обновить данные пользователя")
-    @PutMapping("/{id}/picture")
-    ResponseEntity<?> updatePicture(@PathVariable("id") Integer id, @RequestBody RequestAuth auth, @RequestHeader("url") String url);
+    @PutMapping("/picture")
+    ResponseEntity<?> updatePicture(@PathVariable("file") Integer file);
 
     @Operation(summary = "Обновить отображаемое имя")
-    @PutMapping("/{id}/nickname")
-    ResponseEntity<?> updateNickname(@PathVariable("id") Integer id, @RequestBody RequestAuth auth, @RequestHeader("nickname") String nickname);
+    @PutMapping("/nickname")
+    ResponseEntity<?> updateNickname(@RequestHeader("nickname") String nickname);
 
     @Operation(summary = "Получить текущие настройки")
-    @GetMapping("/{id}/settings")
-    ResponseEntity<UserSettingsDTO> getSettings(@PathVariable("id") Integer id);
+    @GetMapping("/settings")
+    ResponseEntity<UserSettingsDTO> getSettings();
 
     @Operation(summary = "Обновить токен Firebase")
-    @PutMapping("{id}/firebase")
-    ResponseEntity<?> updateFirebaseToken(@PathVariable("id") Integer id, @RequestParam String token);
+    @PutMapping("/firebase")
+    ResponseEntity<?> updateFirebaseToken(@RequestParam String token);
 
     @Operation(summary = "Получить новости")
-    @GetMapping("/{id}/feed")
-    ResponseEntity<List<ResponsePostDTO>> getFeed(@PathVariable("id") Integer id, @RequestParam("page") Integer page);
+    @GetMapping("/feed")
+    ResponseEntity<List<ResponsePostDTO>> getFeed(@RequestParam("page") Integer page);
 }

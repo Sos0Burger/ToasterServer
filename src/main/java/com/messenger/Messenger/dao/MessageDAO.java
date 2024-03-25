@@ -27,11 +27,11 @@ public class MessageDAO{
 
     @ManyToOne
     @JoinColumn(name="sender", nullable=false)
-    private UserDAO sender;
+    private UserProfileDAO sender;
 
     @ManyToOne
     @JoinColumn(name="receiver", nullable=false)
-    private UserDAO receiver;
+    private UserProfileDAO receiver;
 
     @Column(name = "gmt_date")
     private Date date;

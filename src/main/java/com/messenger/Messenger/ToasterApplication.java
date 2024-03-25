@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @OpenAPIDefinition
-public class MessengerApplication {
+public class ToasterApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MessengerApplication.class, args);
+		SpringApplication.run(ToasterApplication.class, args);
 	}
 
 }

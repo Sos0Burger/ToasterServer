@@ -7,6 +7,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class AlreadyExistsException extends Exception {
+public class AlreadyExistsException extends RuntimeException {
     private String  message;
 }

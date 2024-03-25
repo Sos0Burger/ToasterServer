@@ -27,7 +27,7 @@ public class PostDAO {
 
     @ManyToOne
     @JoinColumn(name="creator", nullable=false)
-    private UserDAO creator;
+    private UserProfileDAO creator;
 
     @Column(name = "gmt_date")
     private Date date;

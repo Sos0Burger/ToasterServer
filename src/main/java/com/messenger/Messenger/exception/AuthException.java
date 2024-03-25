@@ -7,6 +7,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class AuthException extends Exception{
+public class AuthException extends RuntimeException{
     private String message;
 }

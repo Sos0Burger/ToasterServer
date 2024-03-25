@@ -12,6 +12,6 @@ public class UserSettingsDTO {
     private String email;
     @Schema(description = "Отображаемое имя", example = "NAGIBATOR228")
     private String nickName;
-    @Schema(description = "Аватар профиля", example = "https://i.imgur.com/AD3MbBi.jpeg")
-    private String image;
+    @Schema(description = "Аватар профиля")
+    private ResponseFileDTO image;
 }

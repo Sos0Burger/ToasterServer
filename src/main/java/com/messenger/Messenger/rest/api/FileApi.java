@@ -1,7 +1,8 @@
 package com.messenger.Messenger.rest.api;
 
 import com.messenger.Messenger.dto.rs.ResponseFileDTO;
-import com.messenger.Messenger.exception.ExceptionMessage;
+import com.messenger.Messenger.exception.NotFoundException;
+import com.messenger.Messenger.exception.UploadException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,7 +21,7 @@ public interface FileApi {
             @ApiResponse(responseCode = "201", description = "Файл успешно загружен",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Integer.class)))),
             @ApiResponse(responseCode = "500", description = "Ошибка записи файлов",
-                    content = @Content(schema = @Schema(implementation = ExceptionMessage.class))
+                    content = @Content(schema = @Schema(implementation = UploadException.class))
             )
     })
     ResponseEntity<ResponseFileDTO> upload(@RequestPart MultipartFile attachment);
@@ -31,7 +32,7 @@ public interface FileApi {
             @ApiResponse(responseCode = "200", description = "Файл успешно получен",
                     content = @Content(schema = @Schema(implementation = Byte[].class))),
             @ApiResponse(responseCode = "404", description = "Файл с таким ID не найден",
-                    content = @Content(schema = @Schema(implementation = ExceptionMessage.class))
+                    content = @Content(schema = @Schema(implementation = NotFoundException.class))
             )
     })
     ResponseEntity<byte[]> getFile(@PathVariable Integer id);

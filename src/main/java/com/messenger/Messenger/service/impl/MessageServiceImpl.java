@@ -6,7 +6,7 @@ import com.messenger.Messenger.dto.rq.RequestMessageDTO;
 import com.messenger.Messenger.exception.NotFoundException;
 import com.messenger.Messenger.repository.FileRepository;
 import com.messenger.Messenger.repository.MessageRepository;
-import com.messenger.Messenger.repository.UserRepository;
+import com.messenger.Messenger.repository.UserProfileRepository;
 import com.messenger.Messenger.retrofit.FirebaseApiImpl;
 import com.messenger.Messenger.service.MessageService;
 import lombok.SneakyThrows;
@@ -26,7 +26,7 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private MessageRepository messageRepository;
     @Autowired
-    private UserRepository userRepository;
+    private UserProfileRepository userProfileRepository;
     @Autowired
     private FileRepository fileRepository;
 
@@ -35,7 +35,7 @@ public class MessageServiceImpl implements MessageService {
     @SneakyThrows
     @Override
     public MessageDAO create(RequestMessageDTO message) {
-        if (userRepository.existsById(message.getSender()) && userRepository.existsById(message.getReceiver())) {
+        if (userProfileRepository.existsById(message.getSender()) && userProfileRepository.existsById(message.getReceiver())) {
             if (fileRepository.findAllById(message.getAttachments()).size() == message.getAttachments().size()) {
 
                 Integer id = messageRepository.save(message.toDAO()).getId();
@@ -73,9 +73,9 @@ public class MessageServiceImpl implements MessageService {
     @SneakyThrows
     @Override
     public List<MessageDAO> getDialog(Integer userid, Integer companionid, Pageable pageable) {
-        if (userRepository.existsById(userid) && userRepository.existsById(companionid)) {
-            var user = userRepository.findById(userid).get();
-            var companion = userRepository.findById(companionid).get();
+        if (userProfileRepository.existsById(userid) && userProfileRepository.existsById(companionid)) {
+            var user = userProfileRepository.findById(userid).get();
+            var companion = userProfileRepository.findById(companionid).get();
             return new ArrayList<>(messageRepository.findBySenderAndReceiver(user, companion, pageable).getContent());
         }
         throw new NotFoundException("Пользователя с таким ID не существует");

@@ -2,7 +2,7 @@ package com.messenger.Messenger.dto.rq;
 
 import com.messenger.Messenger.dao.FileDAO;
 import com.messenger.Messenger.dao.PostDAO;
-import com.messenger.Messenger.dao.UserDAO;
+import com.messenger.Messenger.dao.UserProfileDAO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class RequestPostDTO {
     private Long date;
     List<Integer> attachments;
 
-    public PostDAO toDAO(UserDAO creator, Set<FileDAO> attachments){
+    public PostDAO toDAO(UserProfileDAO creator, Set<FileDAO> attachments){
         return new PostDAO(null, text, creator, new Date(date), attachments);
     }
 }

@@ -13,9 +13,6 @@ public class ResponseFileDTO {
     @Schema(description = "Имя файла", example = "Кот")
     private String name;
 
-    @Schema(description = "Адрес файла", example = "ipAddress/file/1")
-    private String url;
-
     @Schema(description = "Тип файла", example = "application/doc")
     private String type;
 

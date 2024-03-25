@@ -16,6 +16,6 @@ public class ResponseUserDTO {
     private String nickname;
     @Schema(description = "Список друзей")
     private List<FriendDTO> friends;
-    @Schema(description = "Аватар профиля", example = "https://i.imgur.com/AD3MbBi.jpeg")
-    private String image;
+    @Schema(description = "Аватар профиля")
+    private ResponseFileDTO image;
 }

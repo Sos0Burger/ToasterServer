@@ -4,10 +4,10 @@ import com.messenger.Messenger.dao.UserDAO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserDAO, Integer> {
-    List<UserDAO> findByEmail(String email);
-    List<UserDAO> findByNickname(String nickname);
+    Optional<UserDAO> findByEmail(String email);
+    Boolean existsByEmail(String email);
 }

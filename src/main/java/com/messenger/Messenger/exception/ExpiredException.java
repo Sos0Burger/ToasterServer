@@ -2,13 +2,11 @@ package com.messenger.Messenger.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-public class ExceptionMessage {
+public class ExpiredException extends RuntimeException{
     private String message;
 }

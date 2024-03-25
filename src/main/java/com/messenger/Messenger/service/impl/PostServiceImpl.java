@@ -2,13 +2,13 @@ package com.messenger.Messenger.service.impl;
 
 import com.messenger.Messenger.dao.FileDAO;
 import com.messenger.Messenger.dao.PostDAO;
-import com.messenger.Messenger.dao.UserDAO;
+import com.messenger.Messenger.dao.UserProfileDAO;
 import com.messenger.Messenger.dto.rq.RequestPostDTO;
 import com.messenger.Messenger.repository.FileRepository;
 import com.messenger.Messenger.repository.PostRepository;
-import com.messenger.Messenger.repository.UserRepository;
+import com.messenger.Messenger.repository.UserProfileRepository;
 import com.messenger.Messenger.service.PostService;
-import com.messenger.Messenger.service.UserService;
+import com.messenger.Messenger.service.UserProfileService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -21,17 +21,17 @@ import java.util.Set;
 @Service
 public class PostServiceImpl implements PostService {
 
-    private final UserService userService;
+    private final UserProfileService userProfileService;
     @Autowired
-    private UserRepository userRepository;
+    private UserProfileRepository userProfileRepository;
     @Autowired
     private PostRepository postRepository;
     @Autowired
     private FileRepository fileRepository;
 
     @Autowired
-    public PostServiceImpl(UserService userService) {
-        this.userService = userService;
+    public PostServiceImpl(UserProfileService userProfileService) {
+        this.userProfileService = userProfileService;
     }
 
 
@@ -39,23 +39,23 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDAO> getPosts(Integer userid, Pageable pageable) {
         return postRepository
-                .findByCreator(userService.getUser(userid), pageable)
+                .findByCreator(userProfileService.getUser(userid), pageable)
                 .getContent();
     }
 
     @SneakyThrows
     @Override
     public PostDAO createPost(RequestPostDTO postDTO) {
-        UserDAO creator = userService.getUser(postDTO.getCreator());
+        UserProfileDAO creator = userProfileService.getUser(postDTO.getCreator());
         Set<FileDAO> attachments = new HashSet<>(fileRepository.findAllById(postDTO.getAttachments()));
 
         PostDAO post = postRepository.save(postDTO.toDAO(creator, attachments));
 
         for (var item: creator.getFriends()
              ) {
-            UserDAO userDAO = userService.getUser(item);
-            userDAO.getFeed().add(post);
-            userRepository.save(userDAO);
+            UserProfileDAO userProfileDAO = userProfileService.getUser(item);
+            userProfileDAO.getFeed().add(post);
+            userProfileRepository.save(userProfileDAO);
         }
         return post;
     }

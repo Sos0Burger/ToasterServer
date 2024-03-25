@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Entity
 @Table(name = "files")
@@ -31,6 +30,6 @@ public class FileDAO {
     private byte[] data;
 
     public ResponseFileDTO toDTO(){
-        return new ResponseFileDTO(id,name, ServletUriComponentsBuilder.fromCurrentContextPath().path("/file/").path(id.toString()).toUriString(), type, data.length);
+        return new ResponseFileDTO(id, name, type, data.length);
     }
 }
