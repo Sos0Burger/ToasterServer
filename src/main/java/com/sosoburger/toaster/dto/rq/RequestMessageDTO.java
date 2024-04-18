@@ -3,8 +3,11 @@ package com.sosoburger.toaster.dto.rq;
 import com.sosoburger.toaster.config.SpringConfig;
 import com.sosoburger.toaster.dao.FileDAO;
 import com.sosoburger.toaster.dao.MessageDAO;
+import com.sosoburger.toaster.dao.UserDAO;
+import com.sosoburger.toaster.dao.UserProfileDAO;
 import com.sosoburger.toaster.repository.FileRepository;
 import com.sosoburger.toaster.repository.UserProfileRepository;
+import com.sosoburger.toaster.service.FileService;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -35,12 +38,12 @@ public class RequestMessageDTO {
     private Long date;
     @ArraySchema
     List<Integer> attachments;
-    public MessageDAO toDAO(Integer sender) {
+    public MessageDAO toDAO(UserProfileDAO sender, UserProfileDAO receiver, FileService fileService) {
         Set<FileDAO> fileDAOS = new HashSet<>();
         for (Integer id: attachments
              ) {
-            fileDAOS.add(fileRepository.findById(id).get());
+            fileDAOS.add(fileService.findById(id));
         }
-        return new MessageDAO(null, text, USER_PROFILE_REPOSITORY.findById(sender).get(), USER_PROFILE_REPOSITORY.findById(receiver).get(),new Date(date), fileDAOS);
+        return new MessageDAO(null, text, sender, receiver,new Date(date), fileDAOS);
     }
 }
