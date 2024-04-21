@@ -1,5 +1,6 @@
 package com.sosoburger.toaster.rest.api;
 
+import com.sosoburger.toaster.SortEnum;
 import com.sosoburger.toaster.dto.rq.RequestCommentDTO;
 import com.sosoburger.toaster.dto.rq.RequestPostDTO;
 import com.sosoburger.toaster.dto.rs.ResponseCommentDTO;
@@ -28,5 +29,5 @@ public interface PostApi {
     ResponseEntity<ResponsePostDTO> getPost(@PathVariable("id") Integer id);
 
     @GetMapping("/{id}/comments")
-    ResponseEntity<List<ResponseCommentDTO>> getPostComments(@PathVariable("id")Integer id);
+    ResponseEntity<List<ResponseCommentDTO>> getPostComments(@PathVariable("id")Integer id, @RequestParam("sort")SortEnum sorting);
 }

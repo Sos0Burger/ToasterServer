@@ -1,5 +1,7 @@
 package com.sosoburger.toaster.service;
 
+import com.sosoburger.toaster.SortEnum;
+import com.sosoburger.toaster.dao.CommentDAO;
 import com.sosoburger.toaster.dao.PostDAO;
 import com.sosoburger.toaster.dao.UserDAO;
 import com.sosoburger.toaster.dao.UserProfileDAO;
@@ -17,4 +19,6 @@ public interface PostService {
     PostDAO get(Integer id);
 
     PostDAO smashLike(Integer id, UserProfileDAO userProfileDAO);
+
+    List<CommentDAO> getCommentsWithSorting(Integer id, SortEnum sorting);
  }

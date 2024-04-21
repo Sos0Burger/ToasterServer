@@ -1,11 +1,10 @@
 package com.sosoburger.toaster.service.impl;
 
-import com.sosoburger.toaster.dao.FileDAO;
-import com.sosoburger.toaster.dao.PostDAO;
-import com.sosoburger.toaster.dao.UserDAO;
-import com.sosoburger.toaster.dao.UserProfileDAO;
+import com.sosoburger.toaster.SortEnum;
+import com.sosoburger.toaster.dao.*;
 import com.sosoburger.toaster.dto.rq.RequestPostDTO;
 import com.sosoburger.toaster.exception.NotFoundException;
+import com.sosoburger.toaster.repository.CommentRepository;
 import com.sosoburger.toaster.repository.FileRepository;
 import com.sosoburger.toaster.repository.PostRepository;
 import com.sosoburger.toaster.repository.UserProfileRepository;
@@ -14,6 +13,7 @@ import com.sosoburger.toaster.service.UserProfileService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,6 +31,8 @@ public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
     @Autowired
     private FileRepository fileRepository;
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Autowired
     public PostServiceImpl(UserProfileService userProfileService) {
@@ -78,5 +80,22 @@ public class PostServiceImpl implements PostService {
             post.getUsers().add(userProfileDAO);
         }
         return postRepository.save(post);
+    }
+
+    @Override
+    public List<CommentDAO> getCommentsWithSorting(Integer id, SortEnum sorting) {
+        get(id);
+        switch (sorting){
+            case POPULAR -> {
+                return commentRepository.findAllByPopularity(id);
+            }
+            case NEW -> {
+                return commentRepository.findAllByIdWithSorting(id, Sort.by(Sort.Direction.DESC, "date"));
+            }
+            case OLD -> {
+                return commentRepository.findAllByIdWithSorting(id, Sort.by(Sort.Direction.ASC, "date"));
+            }
+        }
+        return get(id).getComments();
     }
 }

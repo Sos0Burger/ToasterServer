@@ -61,7 +61,6 @@ public interface UserApi {
     @Operation(summary = "Авторизация")
     @GetMapping("/auth")
     ResponseEntity<Integer> auth();
-
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",

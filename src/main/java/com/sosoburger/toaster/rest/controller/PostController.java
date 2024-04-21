@@ -1,5 +1,6 @@
 package com.sosoburger.toaster.rest.controller;
 
+import com.sosoburger.toaster.SortEnum;
 import com.sosoburger.toaster.dao.PostDAO;
 import com.sosoburger.toaster.dao.UserDAO;
 import com.sosoburger.toaster.dto.rq.RequestCommentDTO;
@@ -83,9 +84,8 @@ public class PostController implements PostApi {
     }
 
     @Override
-    public ResponseEntity<List<ResponseCommentDTO>> getPostComments(Integer id) {
-        var post = postService.get(id);
-        var response = Mapper.commentsToDTOList(post.getComments(), getUserDetails().getUserProfileDAO().getId());
+    public ResponseEntity<List<ResponseCommentDTO>> getPostComments(Integer id, SortEnum sorting) {
+        var response = Mapper.commentsToDTOList(postService.getCommentsWithSorting(id, sorting), getUserDetails().getUserProfileDAO().getId());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
