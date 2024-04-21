@@ -34,20 +34,21 @@ public class UserProfileDAO {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image")
     private FileDAO image;
+
     @Column(name = "sent_messages")
     @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
     private List<MessageDAO> sentMessages = new ArrayList<>();
+
     @Column(name = "received_messages")
     @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
     private List<MessageDAO> receivedMessages  = new ArrayList<>();
+
     @Column(name = "firebase_key")
     private String firebaseToken;
 
-    @Column(name = "posts")
     @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
     private List<PostDAO> posts = new ArrayList<>();
 
-    @Column
     @OneToMany
     @JoinColumn(name = "user_id")
     private List<PostDAO> feed = new ArrayList<>();
@@ -55,6 +56,15 @@ public class UserProfileDAO {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private UserDAO user;
+
+    @ManyToMany (mappedBy = "users")
+    private List<PostDAO> likedPosts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+    private List<CommentDAO> comments = new ArrayList<>();
+
+    @ManyToMany (mappedBy = "users")
+    private List<CommentDAO> likedComments = new ArrayList<>();
     public ResponseUserDTO toDTO(List<FriendDTO> friendDTOs){
         return new ResponseUserDTO(id, nickname, friendDTOs , image==null?null:image.toDTO());
     }

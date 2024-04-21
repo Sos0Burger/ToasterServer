@@ -3,10 +3,7 @@ package com.sosoburger.toaster.dao;
 import com.sosoburger.toaster.dto.rs.ResponseFileDTO;
 import com.sosoburger.toaster.dto.rs.ResponsePostDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.*;
 
@@ -35,15 +32,45 @@ public class PostDAO {
     @Column(name = "attachment")
     @OneToMany
     @JoinColumn(name = "post_id")
-    private Set<FileDAO> attachments = new HashSet<>();
+    private List<FileDAO> attachments = new ArrayList<>();
 
-    public ResponsePostDTO toDTO(){
+    @ManyToMany
+    @JoinTable(
+            name = "posts_users",
+            joinColumns = @JoinColumn(
+                    name = "post_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"))
+    private List<UserProfileDAO> users = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "post")
+    private List<CommentDAO> comments = new ArrayList<>();
+
+
+
+    public ResponsePostDTO toDTO(Integer userProfile){
         List<ResponseFileDTO> attachmentsDTO = new ArrayList<>();
         for (FileDAO file:attachments
         ) {
             attachmentsDTO.add(file.toDTO());
         }
-        return new ResponsePostDTO(id, text, creator.toFriendDTO(), date.getTime(), attachmentsDTO);
+        CommentDAO popular = null;
+        for (var item: comments){
+            if(popular==null||popular.getUsers().size()<item.getUsers().size()){
+                popular = item;
+            }
+        }
+        return new ResponsePostDTO(
+                id,
+                text,
+                creator.toFriendDTO(),
+                date.getTime(),
+                attachmentsDTO,
+                users.size(),
+                users.stream().anyMatch(item-> item.getId().equals(userProfile)),
+                comments.size(),
+                popular==null?null:popular.toDTO(userProfile));
     }
 
 }

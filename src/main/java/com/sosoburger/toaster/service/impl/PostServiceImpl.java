@@ -5,6 +5,7 @@ import com.sosoburger.toaster.dao.PostDAO;
 import com.sosoburger.toaster.dao.UserDAO;
 import com.sosoburger.toaster.dao.UserProfileDAO;
 import com.sosoburger.toaster.dto.rq.RequestPostDTO;
+import com.sosoburger.toaster.exception.NotFoundException;
 import com.sosoburger.toaster.repository.FileRepository;
 import com.sosoburger.toaster.repository.PostRepository;
 import com.sosoburger.toaster.repository.UserProfileRepository;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,7 +50,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDAO createPost(RequestPostDTO postDTO, UserDAO user) {
         UserProfileDAO creator = user.getUserProfileDAO();
-        Set<FileDAO> attachments = new HashSet<>(fileRepository.findAllById(postDTO.getAttachments()));
+        List<FileDAO> attachments = new ArrayList<>(fileRepository.findAllById(postDTO.getAttachments()));
 
         PostDAO post = postRepository.save(postDTO.toDAO(creator, attachments));
 
@@ -59,5 +61,22 @@ public class PostServiceImpl implements PostService {
             userProfileRepository.save(userProfileDAO);
         }
         return post;
+    }
+
+    @Override
+    public PostDAO get(Integer id) {
+        if (postRepository.existsById(id)){
+            return postRepository.findById(id).get();
+        }
+        throw new NotFoundException("Пост с таким ID не существует");
+    }
+
+    @Override
+    public PostDAO smashLike(Integer id, UserProfileDAO userProfileDAO) {
+        var post = get(id);
+        if (!post.getUsers().remove(userProfileDAO)){
+            post.getUsers().add(userProfileDAO);
+        }
+        return postRepository.save(post);
     }
 }

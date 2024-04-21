@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +21,7 @@ public class RequestPostDTO {
     private Long date;
     List<Integer> attachments;
 
-    public PostDAO toDAO(UserProfileDAO creator, Set<FileDAO> attachments){
-        return new PostDAO(null, text, creator, new Date(date), attachments);
+    public PostDAO toDAO(UserProfileDAO creator, List<FileDAO> attachments){
+        return new PostDAO(null, text, creator, new Date(date), attachments, new ArrayList<>(), new ArrayList<>());
     }
 }

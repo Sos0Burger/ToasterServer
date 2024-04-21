@@ -155,7 +155,7 @@ public class UserController implements UserApi {
         List<ResponsePostDTO> feed = new ArrayList<>();
         for (var item: userProfileService.getFeed(getUserDetails().getId(), PageRequest.of(page, 15, Sort.by(Sort.Direction.DESC, "date")))
              ) {
-            feed.add(item.toDTO());
+            feed.add(item.toDTO(getUserDetails().getId()));
         }
         return new ResponseEntity<>(feed, HttpStatus.OK);
     }

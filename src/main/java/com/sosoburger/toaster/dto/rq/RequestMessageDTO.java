@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -24,6 +25,7 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
 public class RequestMessageDTO {
     private static final UserProfileRepository USER_PROFILE_REPOSITORY = SpringConfig.contextProvider().getApplicationContext().getBean("userRepository", UserProfileRepository.class);
     private static final FileRepository fileRepository = SpringConfig.contextProvider().getApplicationContext().getBean("fileRepository", FileRepository.class);
