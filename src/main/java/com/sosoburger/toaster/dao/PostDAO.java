@@ -19,7 +19,7 @@ public class PostDAO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "text")
+    @Column(name = "text", columnDefinition = "TEXT")
     private String text;
 
     @ManyToOne

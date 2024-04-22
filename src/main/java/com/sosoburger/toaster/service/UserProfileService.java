@@ -15,7 +15,7 @@ public interface UserProfileService {
 
     UserProfileDAO sendFriendRequest(Integer senderid, Integer receiverid);
 
-    UserProfileDAO acceptFriendRequest(Integer receiverid, Integer senderid);
+    UserProfileDAO acceptFriendRequest(Integer senderid, Integer receiverid);
 
     List<UserProfileDAO> getFriends(UserDAO userDAO);
 
@@ -31,4 +31,10 @@ public interface UserProfileService {
 
     List<PostDAO> getFeed(Integer id, Pageable page);
 
+    void deleteFriendRequest(Integer id, UserProfileDAO userProfile);
+
+    void deleteFriend(Integer id, UserProfileDAO userProfile);
+    List<UserProfileDAO> search(String search);
+    List<UserProfileDAO> findAllByIds(List<Integer> ids);
+    List<PostDAO> getUserPosts(Integer id, String query, Integer page);
 }

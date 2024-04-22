@@ -1,12 +1,8 @@
 package com.sosoburger.toaster.dto.rq;
 
-import com.sosoburger.toaster.config.SpringConfig;
 import com.sosoburger.toaster.dao.FileDAO;
 import com.sosoburger.toaster.dao.MessageDAO;
-import com.sosoburger.toaster.dao.UserDAO;
 import com.sosoburger.toaster.dao.UserProfileDAO;
-import com.sosoburger.toaster.repository.FileRepository;
-import com.sosoburger.toaster.repository.UserProfileRepository;
 import com.sosoburger.toaster.service.FileService;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,8 +23,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Setter
 public class RequestMessageDTO {
-    private static final UserProfileRepository USER_PROFILE_REPOSITORY = SpringConfig.contextProvider().getApplicationContext().getBean("userRepository", UserProfileRepository.class);
-    private static final FileRepository fileRepository = SpringConfig.contextProvider().getApplicationContext().getBean("fileRepository", FileRepository.class);
     @Schema(description = "Текст сообщения", example = "Привет!")
     private String text;
     @NotNull

@@ -2,5 +2,5 @@ package com.sosoburger.toaster;
 
 public class FireBaseApiToken {
     public static final String token =
-            "AAAAA0jw3X5Y:APA91bHtFUlpNpB74MSRbl3AjO_rIlv3I4YWiFTiZXaKiFPy7PIl6eyk5AVUdg66ugfdu8DpZeudDjGwudVcbDtJZIYEUaeYA6Z7Fvd2d_dkb9O9Bxc7_rVpJpzdOFRl3lvi16RbJlKL";
+            "AAAAXKopses:APA91bHRN8nijKCr4S47Up8QPglBaXdNrd4i5I2LGzoUiw8-43ceuGtxy8BJl3tjKMPtKQedlTOV77ENI3qPszL-2knj5PtW2QdXaDk5L93P2izXgKEwIJnvw9lG4cZDG-0SkZwt4vK-";
 }

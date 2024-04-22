@@ -61,6 +61,7 @@ public interface UserApi {
     @Operation(summary = "Авторизация")
     @GetMapping("/auth")
     ResponseEntity<Integer> auth();
+
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
@@ -154,4 +155,26 @@ public interface UserApi {
     @Operation(summary = "Получить новости")
     @GetMapping("/feed")
     ResponseEntity<List<ResponsePostDTO>> getFeed(@RequestParam("page") Integer page);
+
+    @Operation(summary = "Отменить заявку в друзья")
+    @DeleteMapping("/friend-request")
+    ResponseEntity<HttpStatus> deleteRequest(@RequestParam("id") Integer id);
+
+    @Operation(summary = "Удалить из друзей")
+    @DeleteMapping("/friend")
+    ResponseEntity<HttpStatus> deleteFriend(@RequestParam("id") Integer id);
+
+    @Operation(summary = "Поиск пользователей")
+    @GetMapping("/search")
+    ResponseEntity<List<FriendDTO>> searchUsers(@RequestParam("query") String query);
+
+    @Operation(summary = "Профиль пользователя")
+    @GetMapping("/{id}")
+    ResponseEntity<ResponseUserDTO> getUser(@PathVariable("id") Integer id);
+
+    @Operation(summary = "Получить посты пользователя")
+    @GetMapping("/{id}/posts")
+    ResponseEntity<List<ResponsePostDTO>> getUserPosts(@PathVariable("id") Integer id,
+                                       @RequestParam(value = "query", required = false, defaultValue = "")String query,
+                                       @RequestParam("page") Integer page);
 }

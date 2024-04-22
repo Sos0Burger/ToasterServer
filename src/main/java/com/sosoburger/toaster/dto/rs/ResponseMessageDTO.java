@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseMessageDTO {
+    Integer id;
     @Schema(description = "Текст сообщения", example = "Привет!")
     private String text;
 

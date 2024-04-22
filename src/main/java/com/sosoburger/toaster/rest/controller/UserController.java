@@ -7,6 +7,7 @@ import com.sosoburger.toaster.dto.rs.FriendDTO;
 import com.sosoburger.toaster.dto.rs.ResponsePostDTO;
 import com.sosoburger.toaster.dto.rs.ResponseUserDTO;
 import com.sosoburger.toaster.dto.rs.UserSettingsDTO;
+import com.sosoburger.toaster.mapper.Mapper;
 import com.sosoburger.toaster.rest.api.UserApi;
 import com.sosoburger.toaster.service.TokenService;
 import com.sosoburger.toaster.service.UserProfileService;
@@ -51,7 +52,7 @@ public class UserController implements UserApi {
 
         var profile = userProfileService.create(user);
 
-        return new ResponseEntity<>(profile.toDTO(new ArrayList<>()), HttpStatus.CREATED);
+        return new ResponseEntity<>(profile.toDTO(new ArrayList<>(), getUserDetails().getUserProfileDAO()), HttpStatus.CREATED);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class UserController implements UserApi {
             friendList.add(item.toFriendDTO());
         }
 
-        return new ResponseEntity<>(user.getUserProfileDAO().toDTO(friendList), HttpStatus.OK);
+        return new ResponseEntity<>(user.getUserProfileDAO().toDTO(friendList, getUserDetails().getUserProfileDAO()), HttpStatus.OK);
     }
     @Override
     public ResponseEntity<Integer> auth() {
@@ -159,6 +160,54 @@ public class UserController implements UserApi {
         }
         return new ResponseEntity<>(feed, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<HttpStatus> deleteRequest(Integer id) {
+        userProfileService.deleteFriendRequest(id, getUserDetails().getUserProfileDAO());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<HttpStatus> deleteFriend(Integer id) {
+        userProfileService.deleteFriend(id, getUserDetails().getUserProfileDAO());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<FriendDTO>> searchUsers(String query) {
+        List<FriendDTO> response =new ArrayList<>();
+        try {
+            response.add(userProfileService.getUser(Integer.parseInt(query)).toFriendDTO());
+        } catch (NumberFormatException ignored){
+
+        }
+
+        response.addAll(Mapper.friendsToDTOList(userProfileService.search(query)));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+    @Override
+    public ResponseEntity<ResponseUserDTO> getUser(Integer id) {
+        var user = userProfileService.getUser(id);
+        return new ResponseEntity<>(
+                user.toDTO(
+                        Mapper.friendsToDTOList(userProfileService.findAllByIds(user.getFriends())),
+                        getUserDetails().getUserProfileDAO()
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @Override
+    public ResponseEntity<List<ResponsePostDTO>> getUserPosts(Integer id, String query, Integer page) {
+        var response = Mapper.postsToDTOList(
+                userProfileService.getUserPosts(id, query, page),
+                getUserDetails().getUserProfileDAO()
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 
     public UserDAO getUserDetails(){
         return userService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());

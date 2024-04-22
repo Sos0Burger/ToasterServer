@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface UserProfileRepository extends JpaRepository<UserProfileDAO, Integer> {
     List<UserProfileDAO> findByNickname(String nickname);
+
+    List<UserProfileDAO> findByNicknameContainingIgnoreCase(String nickname);
 }

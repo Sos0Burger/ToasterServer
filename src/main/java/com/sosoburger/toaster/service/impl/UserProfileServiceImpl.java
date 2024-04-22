@@ -5,12 +5,15 @@ import com.sosoburger.toaster.dao.UserDAO;
 import com.sosoburger.toaster.dao.UserProfileDAO;
 import com.sosoburger.toaster.exception.AlreadyExistsException;
 import com.sosoburger.toaster.exception.NotFoundException;
+import com.sosoburger.toaster.repository.PostRepository;
 import com.sosoburger.toaster.repository.UserProfileRepository;
 import com.sosoburger.toaster.service.FileService;
 import com.sosoburger.toaster.service.UserProfileService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,6 +30,8 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Autowired
     private FileService fileService;
+    @Autowired
+    private PostRepository postRepository;
 
     @Override
     public UserProfileDAO create(UserDAO userDAO) {
@@ -86,7 +91,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @SneakyThrows
     @Override
-    public UserProfileDAO acceptFriendRequest(Integer receiverid, Integer senderid) {
+    public UserProfileDAO acceptFriendRequest(Integer senderid, Integer receiverid) {
         var sender = getUser(senderid);
         var receiver = getUser(receiverid);
         if (receiver.getPending().contains(senderid) && sender.getSent().contains(receiverid)) {
@@ -163,5 +168,47 @@ public class UserProfileServiceImpl implements UserProfileService {
     @Override
     public List<PostDAO> getFeed(Integer id, Pageable page) {
         return getUser(id).getFeed().stream().toList();
+    }
+
+    @Override
+    public void deleteFriendRequest(Integer id, UserProfileDAO userProfile) {
+        var user = getUser(id);
+        if (userProfile.getSent().remove(id) && user.getPending().remove(userProfile.getId())) {
+            userProfileRepository.save(userProfile);
+            userProfileRepository.save(user);
+            return;
+        }
+        throw new NotFoundException("Заявка этому пользователю не была отправлена");
+
+    }
+
+    @Override
+    public void deleteFriend(Integer id, UserProfileDAO userProfile) {
+        var user = getUser(id);
+        if (userProfile.getFriends().remove(id) && user.getFriends().remove(userProfile.getId())) {
+            userProfileRepository.save(userProfile);
+            userProfileRepository.save(user);
+            return;
+        }
+        throw new NotFoundException("Этого пользователя нет у вас в друзьях");
+    }
+
+    @Override
+    public List<UserProfileDAO> search(String search) {
+        return userProfileRepository.findByNicknameContainingIgnoreCase(search);
+    }
+
+    @Override
+    public List<UserProfileDAO> findAllByIds(List<Integer> ids) {
+        return userProfileRepository.findAllById(ids);
+    }
+
+    @Override
+    public List<PostDAO> getUserPosts(Integer id, String query, Integer page) {
+        return postRepository.findByCreatorAndTextContainingIgnoreCase(
+                getUser(id),
+                query,
+                PageRequest.of(page, 15, Sort.by(Sort.Direction.DESC, "date"))
+        );
     }
 }

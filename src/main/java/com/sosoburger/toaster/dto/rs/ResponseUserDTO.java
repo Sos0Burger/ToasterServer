@@ -1,5 +1,6 @@
 package com.sosoburger.toaster.dto.rs;
 
+import com.sosoburger.toaster.FriendStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,4 +19,5 @@ public class ResponseUserDTO {
     private List<FriendDTO> friends;
     @Schema(description = "Аватар профиля")
     private ResponseFileDTO image;
+    private FriendStatusEnum status;
 }
