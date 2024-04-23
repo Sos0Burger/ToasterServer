@@ -1,10 +1,7 @@
 package com.sosoburger.toaster.rest.api;
 
 import com.sosoburger.toaster.dto.rq.RequestUserDTO;
-import com.sosoburger.toaster.dto.rs.FriendDTO;
-import com.sosoburger.toaster.dto.rs.ResponsePostDTO;
-import com.sosoburger.toaster.dto.rs.ResponseUserDTO;
-import com.sosoburger.toaster.dto.rs.UserSettingsDTO;
+import com.sosoburger.toaster.dto.rs.*;
 import com.sosoburger.toaster.exception.AlreadyExistsException;
 import com.sosoburger.toaster.exception.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -177,4 +174,10 @@ public interface UserApi {
     ResponseEntity<List<ResponsePostDTO>> getUserPosts(@PathVariable("id") Integer id,
                                        @RequestParam(value = "query", required = false, defaultValue = "")String query,
                                        @RequestParam("page") Integer page);
+    @Operation(summary = "Получить чаты")
+    @GetMapping("/chats")
+    ResponseEntity<List<ResponseChatDTO>> getUserChats();
+    @Operation(summary = "Выйти из аккаунта")
+    @PutMapping("/logout")
+    ResponseEntity<HttpStatus> logout();
 }

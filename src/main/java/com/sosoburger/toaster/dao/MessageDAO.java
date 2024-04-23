@@ -36,6 +36,9 @@ public class MessageDAO{
     @Column(name = "gmt_date")
     private Date date;
 
+    @Column(name = "read")
+    private Boolean read;
+
     @Column(name = "attachment")
     @OneToMany
     @JoinColumn(name = "message_id")

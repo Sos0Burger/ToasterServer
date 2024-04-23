@@ -40,6 +40,6 @@ public class RequestMessageDTO {
              ) {
             fileDAOS.add(fileService.findById(id));
         }
-        return new MessageDAO(null, text, sender, receiver,new Date(date), fileDAOS);
+        return new MessageDAO(null, text, sender, receiver,new Date(date), false, fileDAOS);
     }
 }

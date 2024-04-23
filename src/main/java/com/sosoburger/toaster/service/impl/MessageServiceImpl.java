@@ -1,12 +1,12 @@
 package com.sosoburger.toaster.service.impl;
 
 import com.sosoburger.toaster.dao.MessageDAO;
+import com.sosoburger.toaster.dao.UserProfileDAO;
 import com.sosoburger.toaster.dto.rq.NotificationContent;
 import com.sosoburger.toaster.dto.rq.RequestMessageDTO;
 import com.sosoburger.toaster.exception.NotFoundException;
 import com.sosoburger.toaster.repository.FileRepository;
 import com.sosoburger.toaster.repository.MessageRepository;
-import com.sosoburger.toaster.repository.UserProfileRepository;
 import com.sosoburger.toaster.retrofit.FirebaseApiImpl;
 import com.sosoburger.toaster.service.FileService;
 import com.sosoburger.toaster.service.MessageService;
@@ -14,6 +14,7 @@ import com.sosoburger.toaster.service.UserProfileService;
 import lombok.SneakyThrows;
 import okhttp3.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
@@ -82,6 +83,24 @@ public class MessageServiceImpl implements MessageService {
     public List<MessageDAO> getDialog(Integer userid, Integer companion, Pageable pageable) {
         var user = userProfileService.getUser(userid);
         var companionDAO = userProfileService.getUser(companion);
-        return new ArrayList<>(messageRepository.findBySenderAndReceiver(user, companionDAO, pageable).getContent());
+        var messages = messageRepository.findBySenderAndReceiver(user, companionDAO, pageable);
+        messages.forEach(item -> {
+            if(!userid.equals(item.getSender().getId())){
+                item.setRead(true);
+                messageRepository.save(item);
+            }
+
+        });
+        return new ArrayList<>(messages.getContent());
+    }
+
+    @Override
+    public MessageDAO getLatest(UserProfileDAO sender, UserProfileDAO receiver) {
+        return messageRepository.findLastMessageBetweenUsers(sender, receiver, PageRequest.of(0, 1)).get().findFirst().get();
+    }
+
+    @Override
+    public Integer getUnread(UserProfileDAO sender, UserProfileDAO receiver) {
+        return messageRepository.countUnreadMessages(sender, receiver);
     }
 }

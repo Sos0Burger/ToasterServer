@@ -3,12 +3,10 @@ package com.sosoburger.toaster.rest.controller;
 import com.sosoburger.toaster.dao.UserDAO;
 import com.sosoburger.toaster.dao.UserProfileDAO;
 import com.sosoburger.toaster.dto.rq.RequestUserDTO;
-import com.sosoburger.toaster.dto.rs.FriendDTO;
-import com.sosoburger.toaster.dto.rs.ResponsePostDTO;
-import com.sosoburger.toaster.dto.rs.ResponseUserDTO;
-import com.sosoburger.toaster.dto.rs.UserSettingsDTO;
+import com.sosoburger.toaster.dto.rs.*;
 import com.sosoburger.toaster.mapper.Mapper;
 import com.sosoburger.toaster.rest.api.UserApi;
+import com.sosoburger.toaster.service.MessageService;
 import com.sosoburger.toaster.service.TokenService;
 import com.sosoburger.toaster.service.UserProfileService;
 import com.sosoburger.toaster.service.impl.UserServiceImpl;
@@ -38,6 +36,8 @@ public class UserController implements UserApi {
 
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private MessageService messageService;
 
     @Autowired
     public UserController(UserProfileService userProfileService){
@@ -80,6 +80,7 @@ public class UserController implements UserApi {
     }
     @Override
     public ResponseEntity<Integer> auth() {
+        userProfileService.updateStatus(getUserDetails().getUserProfileDAO(), true);
         return new ResponseEntity<>(getUserDetails().getId(), HttpStatus.OK);
     }
 
@@ -206,6 +207,20 @@ public class UserController implements UserApi {
                 getUserDetails().getUserProfileDAO()
         );
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<ResponseChatDTO>> getUserChats() {
+        var users = userProfileService.getChats(getUserDetails().getUserProfileDAO());
+
+        var response = Mapper.usersToChatDTOList(users, getUserDetails().getUserProfileDAO(), messageService);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<HttpStatus> logout() {
+        userProfileService.updateStatus(getUserDetails().getUserProfileDAO(), false);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

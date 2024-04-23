@@ -37,4 +37,8 @@ public interface UserProfileService {
     List<UserProfileDAO> search(String search);
     List<UserProfileDAO> findAllByIds(List<Integer> ids);
     List<PostDAO> getUserPosts(Integer id, String query, Integer page);
+
+    UserProfileDAO updateStatus(UserProfileDAO user, Boolean status);
+
+    List<UserProfileDAO> getChats(UserProfileDAO user);
 }

@@ -5,6 +5,7 @@ import com.sosoburger.toaster.dao.UserDAO;
 import com.sosoburger.toaster.dao.UserProfileDAO;
 import com.sosoburger.toaster.exception.AlreadyExistsException;
 import com.sosoburger.toaster.exception.NotFoundException;
+import com.sosoburger.toaster.repository.MessageRepository;
 import com.sosoburger.toaster.repository.PostRepository;
 import com.sosoburger.toaster.repository.UserProfileRepository;
 import com.sosoburger.toaster.service.FileService;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -32,6 +34,8 @@ public class UserProfileServiceImpl implements UserProfileService {
     private FileService fileService;
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private MessageRepository messageRepository;
 
     @Override
     public UserProfileDAO create(UserDAO userDAO) {
@@ -50,7 +54,9 @@ public class UserProfileServiceImpl implements UserProfileService {
                 userDAO,
                 new ArrayList<>(),
                 new ArrayList<>(),
-                new ArrayList<>()));
+                new ArrayList<>(),
+                false,
+                new Date()));
 
     }
 
@@ -210,5 +216,17 @@ public class UserProfileServiceImpl implements UserProfileService {
                 query,
                 PageRequest.of(page, 15, Sort.by(Sort.Direction.DESC, "date"))
         );
+    }
+
+    @Override
+    public UserProfileDAO updateStatus(UserProfileDAO user, Boolean status) {
+        user.setStatus(status);
+        user.setLatest_online(new Date());
+        return userProfileRepository.save(user);
+    }
+
+    @Override
+    public List<UserProfileDAO> getChats(UserProfileDAO user) {
+        return userProfileRepository.findAllById(userProfileRepository.getChats(user));
     }
 }
