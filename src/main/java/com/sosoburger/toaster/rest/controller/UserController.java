@@ -52,7 +52,7 @@ public class UserController implements UserApi {
 
         var profile = userProfileService.create(user);
 
-        return new ResponseEntity<>(profile.toDTO(new ArrayList<>(), getUserDetails().getUserProfileDAO()), HttpStatus.CREATED);
+        return new ResponseEntity<>(profile.toDTO(new ArrayList<>(), profile), HttpStatus.CREATED);
     }
 
     @Override
