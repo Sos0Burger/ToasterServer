@@ -13,7 +13,6 @@ import com.sosoburger.toaster.service.UserProfileService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -173,8 +172,8 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public List<PostDAO> getFriendFeed(UserProfileDAO user, String query, Integer page) {
-        return postRepository.getFeed(
-                user,
+        return postRepository.getFriendFeed(
+                user.getFriends(),
                 query,
                 PageRequest.of(page, 15, Sort.by(Sort.Direction.DESC, "date"))
         );
@@ -232,5 +231,10 @@ public class UserProfileServiceImpl implements UserProfileService {
     @Override
     public List<UserProfileDAO> getChats(UserProfileDAO user) {
         return userProfileRepository.findAllById(userProfileRepository.getChats(user));
+    }
+
+    @Override
+    public List<PostDAO> getFeed(String query, Integer page) {
+        return postRepository.getFeed(query, PageRequest.of(page, 15, Sort.by(Sort.Direction.DESC, "date")));
     }
 }

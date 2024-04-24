@@ -11,8 +11,6 @@ import com.sosoburger.toaster.service.TokenService;
 import com.sosoburger.toaster.service.UserProfileService;
 import com.sosoburger.toaster.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -153,7 +151,7 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<List<ResponsePostDTO>> getFeed(String query, Integer page) {
+    public ResponseEntity<List<ResponsePostDTO>> getFriendFeed(String query, Integer page) {
         List<ResponsePostDTO> feed =
                 Mapper
                         .postsToDTOList(
@@ -166,6 +164,12 @@ public class UserController implements UserApi {
                                 getUserDetails().getUserProfileDAO()
                         );
         return new ResponseEntity<>(feed, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<ResponsePostDTO>> getFeed(String query, Integer page) {
+        var response = Mapper.postsToDTOList(userProfileService.getFeed(query, page), getUserDetails().getUserProfileDAO());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override

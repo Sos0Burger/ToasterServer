@@ -40,4 +40,6 @@ public interface UserProfileService {
     UserProfileDAO updateStatus(UserProfileDAO user, Boolean status);
 
     List<UserProfileDAO> getChats(UserProfileDAO user);
+
+    List<PostDAO> getFeed(String query, Integer page);
 }

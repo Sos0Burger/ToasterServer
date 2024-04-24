@@ -149,8 +149,12 @@ public interface UserApi {
     @PutMapping("/firebase")
     ResponseEntity<?> updateFirebaseToken(@RequestParam String token);
 
-    @Operation(summary = "Получить новости")
+    @Operation(summary = "Получить новости от друзей")
     @GetMapping("/feed/friends")
+    ResponseEntity<List<ResponsePostDTO>> getFriendFeed(@RequestParam(value = "query", required = false, defaultValue = "") String query,
+                                                        @RequestParam("page") Integer page);
+    @Operation(summary = "Получить новости")
+    @GetMapping("/feed/all")
     ResponseEntity<List<ResponsePostDTO>> getFeed(@RequestParam(value = "query", required = false, defaultValue = "") String query,
                                                   @RequestParam("page") Integer page);
 

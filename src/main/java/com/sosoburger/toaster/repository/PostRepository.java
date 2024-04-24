@@ -17,8 +17,10 @@ public interface PostRepository extends JpaRepository<PostDAO, Integer> {
 
 
     @Query("SELECT p FROM PostDAO p " +
-            "JOIN UserProfileDAO u ON p.creator.id = u.id " +
-            "JOIN u.friends f " +
-            "WHERE f = :user AND LOWER(p.text) LIKE LOWER(concat('%', concat(:query, '%')))")
-    List<PostDAO> getFeed(@Param("user") UserProfileDAO user, @Param("query") String query, Pageable pageable);
+            "WHERE p.creator.id IN :friendIds " +
+            "AND LOWER(p.text) LIKE LOWER(concat('%', concat(:query, '%')))")
+    List<PostDAO> getFriendFeed(@Param("friendIds") List<Integer> friendIds, @Param("query") String query, Pageable pageable);
+    @Query("SELECT p FROM PostDAO p " +
+            "WHERE LOWER(p.text) LIKE LOWER(concat('%', concat(:query, '%')))")
+    List<PostDAO> getFeed(@Param("query")String query, Pageable pageable);
 }
