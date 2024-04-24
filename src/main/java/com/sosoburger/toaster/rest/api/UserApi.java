@@ -150,8 +150,9 @@ public interface UserApi {
     ResponseEntity<?> updateFirebaseToken(@RequestParam String token);
 
     @Operation(summary = "Получить новости")
-    @GetMapping("/feed")
-    ResponseEntity<List<ResponsePostDTO>> getFeed(@RequestParam("page") Integer page);
+    @GetMapping("/feed/friends")
+    ResponseEntity<List<ResponsePostDTO>> getFeed(@RequestParam(value = "query", required = false, defaultValue = "") String query,
+                                                  @RequestParam("page") Integer page);
 
     @Operation(summary = "Отменить заявку в друзья")
     @DeleteMapping("/friend-request")
@@ -172,11 +173,13 @@ public interface UserApi {
     @Operation(summary = "Получить посты пользователя")
     @GetMapping("/{id}/posts")
     ResponseEntity<List<ResponsePostDTO>> getUserPosts(@PathVariable("id") Integer id,
-                                       @RequestParam(value = "query", required = false, defaultValue = "")String query,
-                                       @RequestParam("page") Integer page);
+                                                       @RequestParam(value = "query", required = false, defaultValue = "") String query,
+                                                       @RequestParam("page") Integer page);
+
     @Operation(summary = "Получить чаты")
     @GetMapping("/chats")
     ResponseEntity<List<ResponseChatDTO>> getUserChats();
+
     @Operation(summary = "Выйти из аккаунта")
     @PutMapping("/logout")
     ResponseEntity<HttpStatus> logout();

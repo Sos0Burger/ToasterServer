@@ -172,8 +172,12 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
-    public List<PostDAO> getFeed(Integer id, Pageable page) {
-        return getUser(id).getFeed().stream().toList();
+    public List<PostDAO> getFriendFeed(UserProfileDAO user, String query, Integer page) {
+        return postRepository.getFeed(
+                user,
+                query,
+                PageRequest.of(page, 15, Sort.by(Sort.Direction.DESC, "date"))
+        );
     }
 
     @Override

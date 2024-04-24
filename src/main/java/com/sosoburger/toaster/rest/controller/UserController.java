@@ -153,12 +153,18 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<List<ResponsePostDTO>> getFeed(Integer page) {
-        List<ResponsePostDTO> feed = new ArrayList<>();
-        for (var item: userProfileService.getFeed(getUserDetails().getId(), PageRequest.of(page, 15, Sort.by(Sort.Direction.DESC, "date")))
-             ) {
-            feed.add(item.toDTO(getUserDetails().getId()));
-        }
+    public ResponseEntity<List<ResponsePostDTO>> getFeed(String query, Integer page) {
+        List<ResponsePostDTO> feed =
+                Mapper
+                        .postsToDTOList(
+                                userProfileService
+                                        .getFriendFeed(
+                                                getUserDetails().getUserProfileDAO(),
+                                                query,
+                                                page
+                                        ),
+                                getUserDetails().getUserProfileDAO()
+                        );
         return new ResponseEntity<>(feed, HttpStatus.OK);
     }
 

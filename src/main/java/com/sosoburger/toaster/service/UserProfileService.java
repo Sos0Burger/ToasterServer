@@ -3,7 +3,6 @@ package com.sosoburger.toaster.service;
 import com.sosoburger.toaster.dao.PostDAO;
 import com.sosoburger.toaster.dao.UserDAO;
 import com.sosoburger.toaster.dao.UserProfileDAO;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public interface UserProfileService {
 
     void updateToken(String token, UserDAO userDAO);
 
-    List<PostDAO> getFeed(Integer id, Pageable page);
+    List<PostDAO> getFriendFeed(UserProfileDAO user, String query, Integer page);
 
     void deleteFriendRequest(Integer id, UserProfileDAO userProfile);
 
