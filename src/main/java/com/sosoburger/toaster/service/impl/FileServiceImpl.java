@@ -20,9 +20,9 @@ public class FileServiceImpl implements FileService {
 
     @SneakyThrows
     @Override
-    public FileDAO save(MultipartFile attachment){
+    public FileDAO save(MultipartFile attachment) {
         try {
-            return fileRepository.save(new FileDAO(null, attachment.getName(), attachment.getContentType(), attachment.getBytes()));
+            return fileRepository.save(new FileDAO(null, attachment.getOriginalFilename(), attachment.getContentType(), attachment.getBytes()));
         } catch (IOException e) {
             throw new UploadException("Ошибка загрузки файлов");
         }

@@ -7,13 +7,16 @@ import com.sosoburger.toaster.rest.api.FileApi;
 import com.sosoburger.toaster.service.FileService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 public class FileController implements FileApi {
@@ -35,10 +38,11 @@ public class FileController implements FileApi {
     }
 
     @Override
-    public ResponseEntity<byte[]> getFile(Integer id) {
+    public ResponseEntity<InputStreamResource> getFile(Integer id) {
         FileDAO file = fileService.findById(id);
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add("Content-Type", file.getType());
-        return new ResponseEntity<>(file.getData(), responseHeaders, HttpStatus.OK);
+        InputStream inputStream = new ByteArrayInputStream(file.getData());
+        return new ResponseEntity<>(new InputStreamResource(inputStream), responseHeaders, HttpStatus.OK);
     }
 }

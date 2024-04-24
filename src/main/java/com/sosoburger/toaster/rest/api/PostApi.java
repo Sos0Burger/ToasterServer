@@ -4,6 +4,7 @@ import com.sosoburger.toaster.SortEnum;
 import com.sosoburger.toaster.dto.rq.RequestCommentDTO;
 import com.sosoburger.toaster.dto.rq.RequestPostDTO;
 import com.sosoburger.toaster.dto.rs.ResponseCommentDTO;
+import com.sosoburger.toaster.dto.rs.ResponseFileDTO;
 import com.sosoburger.toaster.dto.rs.ResponsePostDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,4 +31,7 @@ public interface PostApi {
 
     @GetMapping("/{id}/comments")
     ResponseEntity<List<ResponseCommentDTO>> getPostComments(@PathVariable("id")Integer id, @RequestParam("sort")SortEnum sorting);
+
+    @GetMapping("/{id}/images")
+    ResponseEntity<List<ResponseFileDTO>> getPostFiles(@PathVariable("id")Integer id);
 }

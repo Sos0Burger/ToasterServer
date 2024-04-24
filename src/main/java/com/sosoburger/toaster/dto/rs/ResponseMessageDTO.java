@@ -25,4 +25,6 @@ public class ResponseMessageDTO {
     private Long date;
 
     private List<ResponseFileDTO> attachments;
+
+    private Boolean read;
 }

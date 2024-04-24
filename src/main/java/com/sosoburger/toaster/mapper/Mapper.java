@@ -1,12 +1,10 @@
 package com.sosoburger.toaster.mapper;
 
 import com.sosoburger.toaster.dao.CommentDAO;
+import com.sosoburger.toaster.dao.FileDAO;
 import com.sosoburger.toaster.dao.PostDAO;
 import com.sosoburger.toaster.dao.UserProfileDAO;
-import com.sosoburger.toaster.dto.rs.FriendDTO;
-import com.sosoburger.toaster.dto.rs.ResponseChatDTO;
-import com.sosoburger.toaster.dto.rs.ResponseCommentDTO;
-import com.sosoburger.toaster.dto.rs.ResponsePostDTO;
+import com.sosoburger.toaster.dto.rs.*;
 import com.sosoburger.toaster.service.MessageService;
 
 import java.util.ArrayList;
@@ -35,5 +33,13 @@ public class Mapper {
         List<ResponseChatDTO> response = new ArrayList<>();
         users.forEach(item->response.add(item.toResponseChat(messageService, user)));
         return response;
+    }
+    public static List<ResponseFileDTO> filesToFileDTOList(List<FileDAO> files){
+        List<ResponseFileDTO> attachmentsDTOs = new ArrayList<>();
+        for (FileDAO file:files
+        ) {
+            attachmentsDTOs.add(file.toDTO());
+        }
+        return attachmentsDTOs;
     }
 }

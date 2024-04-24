@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,5 +39,5 @@ public interface FileApi {
                     content = @Content(schema = @Schema(implementation = NotFoundException.class))
             )
     })
-    ResponseEntity<byte[]> getFile(@PathVariable Integer id);
+    ResponseEntity<InputStreamResource> getFile(@PathVariable Integer id);
 }

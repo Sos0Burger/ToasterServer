@@ -6,7 +6,9 @@ import com.sosoburger.toaster.dao.UserDAO;
 import com.sosoburger.toaster.dto.rq.RequestCommentDTO;
 import com.sosoburger.toaster.dto.rq.RequestPostDTO;
 import com.sosoburger.toaster.dto.rs.ResponseCommentDTO;
+import com.sosoburger.toaster.dto.rs.ResponseFileDTO;
 import com.sosoburger.toaster.dto.rs.ResponsePostDTO;
+import com.sosoburger.toaster.exception.NotFoundException;
 import com.sosoburger.toaster.mapper.Mapper;
 import com.sosoburger.toaster.rest.api.PostApi;
 import com.sosoburger.toaster.service.CommentService;
@@ -86,6 +88,16 @@ public class PostController implements PostApi {
     @Override
     public ResponseEntity<List<ResponseCommentDTO>> getPostComments(Integer id, SortEnum sorting) {
         var response = Mapper.commentsToDTOList(postService.getCommentsWithSorting(id, sorting), getUserDetails().getUserProfileDAO().getId());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<ResponseFileDTO>> getPostFiles(Integer id) {
+        var images = postService.get(id).getAttachments();
+        if (images == null || images.isEmpty()){
+            throw new NotFoundException("У поста нет изображений");
+        }
+        var response = Mapper.filesToFileDTOList(images);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
