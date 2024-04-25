@@ -2,6 +2,7 @@ package com.sosoburger.toaster.service;
 
 import com.sosoburger.toaster.dao.MessageDAO;
 import com.sosoburger.toaster.dao.UserProfileDAO;
+import com.sosoburger.toaster.dto.rq.RequestEditMessageDTO;
 import com.sosoburger.toaster.dto.rq.RequestMessageDTO;
 import org.springframework.data.domain.Pageable;
 
@@ -13,4 +14,10 @@ public interface MessageService {
     List<MessageDAO> getDialog(Integer userid, Integer companion, Pageable pageable);
     MessageDAO getLatest(UserProfileDAO sender, UserProfileDAO receiver);
     Integer getUnread(UserProfileDAO sender, UserProfileDAO receiver);
+
+    MessageDAO edit(Integer id, RequestEditMessageDTO message);
+
+    void delete(Integer id);
+
+    MessageDAO get(Integer id);
 }

@@ -3,6 +3,7 @@ package com.sosoburger.toaster.service.impl;
 import com.sosoburger.toaster.dao.MessageDAO;
 import com.sosoburger.toaster.dao.UserProfileDAO;
 import com.sosoburger.toaster.dto.rq.NotificationContent;
+import com.sosoburger.toaster.dto.rq.RequestEditMessageDTO;
 import com.sosoburger.toaster.dto.rq.RequestMessageDTO;
 import com.sosoburger.toaster.exception.NotFoundException;
 import com.sosoburger.toaster.repository.FileRepository;
@@ -22,6 +23,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -42,7 +44,6 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public MessageDAO create(RequestMessageDTO message, Integer sender) {
         if (fileRepository.findAllById(message.getAttachments()).size() == message.getAttachments().size()) {
-
             Integer id = messageRepository.save(
                     message
                             .toDAO(
@@ -102,5 +103,26 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Integer getUnread(UserProfileDAO sender, UserProfileDAO receiver) {
         return messageRepository.countUnreadMessages(sender, receiver);
+    }
+
+    @Override
+    public MessageDAO edit(Integer id, RequestEditMessageDTO message) {
+        var savedMessage = get(id);
+        savedMessage.setText(message.getText());
+        savedMessage.setAttachments(new HashSet<>(fileRepository.findAllById(message.getAttachments())));
+        return messageRepository.save(savedMessage);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        messageRepository.delete(get(id));
+    }
+
+    @Override
+    public MessageDAO get(Integer id) {
+        if (messageRepository.existsById(id)){
+            return messageRepository.findById(id).get();
+        }
+        throw new NotFoundException("Сообщение не найдено");
     }
 }

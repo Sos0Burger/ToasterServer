@@ -74,7 +74,8 @@ public class UserController implements UserApi {
             friendList.add(item.toFriendDTO());
         }
 
-        return new ResponseEntity<>(user.getUserProfileDAO().toDTO(friendList, getUserDetails().getUserProfileDAO()), HttpStatus.OK);
+        var response = user.getUserProfileDAO().toDTO(friendList, getUserDetails().getUserProfileDAO());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @Override
     public ResponseEntity<Integer> auth() {
@@ -201,11 +202,12 @@ public class UserController implements UserApi {
     @Override
     public ResponseEntity<ResponseUserDTO> getUser(Integer id) {
         var user = userProfileService.getUser(id);
+        var response = user.toDTO(
+                Mapper.friendsToDTOList(userProfileService.findAllByIds(user.getFriends())),
+                getUserDetails().getUserProfileDAO()
+        );
         return new ResponseEntity<>(
-                user.toDTO(
-                        Mapper.friendsToDTOList(userProfileService.findAllByIds(user.getFriends())),
-                        getUserDetails().getUserProfileDAO()
-                ),
+                response,
                 HttpStatus.OK
         );
     }

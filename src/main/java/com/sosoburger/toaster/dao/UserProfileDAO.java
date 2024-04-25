@@ -79,7 +79,13 @@ public class UserProfileDAO {
 
     public ResponseUserDTO toDTO(List<FriendDTO> friendDTOs, UserProfileDAO userProfileDAO) {
         if (Objects.equals(userProfileDAO.id, id)) {
-            return new ResponseUserDTO(id, nickname, friendDTOs, image == null ? null : image.toDTO(), FriendStatusEnum.SELF);
+            return new ResponseUserDTO(id,
+                    nickname,
+                    friendDTOs,
+                    image == null ? null : image.toDTO(),
+                    FriendStatusEnum.SELF,
+                    this.status != null && this.status,
+                    latest_online==null? new Date().getTime(): latest_online.getTime());
         }
         FriendStatusEnum status = FriendStatusEnum.NOTHING;
         if (friends.stream().anyMatch(item -> item.equals(userProfileDAO.getId()))) {
@@ -92,7 +98,14 @@ public class UserProfileDAO {
             status = FriendStatusEnum.SENT;
         }
 
-        return new ResponseUserDTO(id, nickname, friendDTOs, image == null ? null : image.toDTO(), status);
+        return new ResponseUserDTO(
+                id,
+                nickname,
+                friendDTOs,
+                image == null ? null : image.toDTO(),
+                status,
+                this.status != null && this.status,
+                latest_online==null? new Date().getTime(): latest_online.getTime());
     }
 
     public FriendDTO toFriendDTO() {
@@ -117,7 +130,7 @@ public class UserProfileDAO {
                 text,
                 latest.getDate().getTime(),
                 messageService.getUnread(this, user),
-                image==null?null:image.toDTO(),
+                image == null ? null : image.toDTO(),
                 status != null && status
         );
     }

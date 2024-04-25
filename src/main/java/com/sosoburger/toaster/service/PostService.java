@@ -5,6 +5,7 @@ import com.sosoburger.toaster.dao.CommentDAO;
 import com.sosoburger.toaster.dao.PostDAO;
 import com.sosoburger.toaster.dao.UserDAO;
 import com.sosoburger.toaster.dao.UserProfileDAO;
+import com.sosoburger.toaster.dto.rq.RequestEditPost;
 import com.sosoburger.toaster.dto.rq.RequestPostDTO;
 import org.springframework.data.domain.Pageable;
 
@@ -21,4 +22,6 @@ public interface PostService {
     PostDAO smashLike(Integer id, UserProfileDAO userProfileDAO);
 
     List<CommentDAO> getCommentsWithSorting(Integer id, SortEnum sorting);
+
+    PostDAO updatePost(Integer id, RequestEditPost post);
  }

@@ -28,6 +28,8 @@ public class FileDAO {
     @Column(name = "data")
     @Lob
     private byte[] data;
+    @Column(name = "hash", columnDefinition = "TEXT")
+    private String hash;
 
     public ResponseFileDTO toDTO(){
         return new ResponseFileDTO(id, name, type, data.length);

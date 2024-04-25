@@ -4,6 +4,7 @@ import com.sosoburger.toaster.SortEnum;
 import com.sosoburger.toaster.dao.PostDAO;
 import com.sosoburger.toaster.dao.UserDAO;
 import com.sosoburger.toaster.dto.rq.RequestCommentDTO;
+import com.sosoburger.toaster.dto.rq.RequestEditPost;
 import com.sosoburger.toaster.dto.rq.RequestPostDTO;
 import com.sosoburger.toaster.dto.rs.ResponseCommentDTO;
 import com.sosoburger.toaster.dto.rs.ResponseFileDTO;
@@ -99,6 +100,12 @@ public class PostController implements PostApi {
         }
         var response = Mapper.filesToFileDTOList(images);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<ResponsePostDTO> updatePost(Integer id, RequestEditPost post) {
+        var response = postService.updatePost(id, post);
+        return new ResponseEntity<>(response.toDTO(getUserDetails().getUserProfileDAO().getId()), HttpStatus.OK);
     }
 
     public UserDAO getUserDetails(){

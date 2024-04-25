@@ -2,6 +2,7 @@ package com.sosoburger.toaster.service.impl;
 
 import com.sosoburger.toaster.SortEnum;
 import com.sosoburger.toaster.dao.*;
+import com.sosoburger.toaster.dto.rq.RequestEditPost;
 import com.sosoburger.toaster.dto.rq.RequestPostDTO;
 import com.sosoburger.toaster.exception.NotFoundException;
 import com.sosoburger.toaster.repository.CommentRepository;
@@ -17,9 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -97,5 +96,13 @@ public class PostServiceImpl implements PostService {
             }
         }
         return get(id).getComments();
+    }
+
+    @Override
+    public PostDAO updatePost(Integer id, RequestEditPost post) {
+        var savedPost = get(id);
+        savedPost.setText(post.getText());
+        savedPost.setAttachments(fileRepository.findAllById(post.getAttachments()));
+        return postRepository.save(savedPost);
     }
 }

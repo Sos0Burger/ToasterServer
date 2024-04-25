@@ -20,4 +20,6 @@ public class ResponseUserDTO {
     @Schema(description = "Аватар профиля")
     private ResponseFileDTO image;
     private FriendStatusEnum status;
+    private Boolean isOnline;
+    private Long last_online;
 }
