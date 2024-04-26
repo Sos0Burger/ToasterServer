@@ -1,6 +1,6 @@
 package com.sosoburger.toaster.dao;
 
-import com.sosoburger.toaster.FriendStatusEnum;
+import com.sosoburger.toaster.state.FriendStatusEnum;
 import com.sosoburger.toaster.dto.rs.FriendDTO;
 import com.sosoburger.toaster.dto.rs.ResponseChatDTO;
 import com.sosoburger.toaster.dto.rs.ResponseUserDTO;

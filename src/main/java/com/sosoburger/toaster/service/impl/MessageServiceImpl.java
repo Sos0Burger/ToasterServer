@@ -85,6 +85,7 @@ public class MessageServiceImpl implements MessageService {
         var user = userProfileService.getUser(userid);
         var companionDAO = userProfileService.getUser(companion);
         var messages = messageRepository.findBySenderAndReceiver(user, companionDAO, pageable);
+        var response = new ArrayList<>(messages.getContent());
         messages.forEach(item -> {
             if(!userid.equals(item.getSender().getId())){
                 item.setRead(true);
@@ -92,7 +93,7 @@ public class MessageServiceImpl implements MessageService {
             }
 
         });
-        return new ArrayList<>(messages.getContent());
+        return response;
     }
 
     @Override

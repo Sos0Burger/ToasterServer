@@ -29,19 +29,20 @@ public class MessageController implements MessageApi {
     @Autowired
     private final UserServiceImpl userService;
 
-    public MessageController(MessageService messageService, UserServiceImpl userService){
+    public MessageController(MessageService messageService, UserServiceImpl userService) {
         this.messageService = messageService;
         this.userService = userService;
     }
 
     @Override
     public ResponseEntity<ResponseMessageDTO> create(RequestMessageDTO message) {
-        return new ResponseEntity<>(messageService.create(message, getUserDetails().getId()).toDTO(), HttpStatus.CREATED);
+        var savedMessage = messageService.create(message, getUserDetails().getId());
+        return new ResponseEntity<>(savedMessage.toDTO(), HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<List<ResponseMessageDTO>> getAll() {
-        List<MessageDAO> messageDAOs =  messageService.getAll();
+        List<MessageDAO> messageDAOs = messageService.getAll();
         List<ResponseMessageDTO> DTOs = new ArrayList<>();
         for (MessageDAO message : messageDAOs
         ) {
@@ -52,7 +53,12 @@ public class MessageController implements MessageApi {
 
     @Override
     public ResponseEntity<List<ResponseMessageDTO>> getDialog(Integer companion, Integer page) {
-        List<MessageDAO> messageDAOs = messageService.getDialog(getUserDetails().getId(), companion, PageRequest.of(page, 15, Sort.by(Sort.Direction.DESC, "date")));
+        List<MessageDAO> messageDAOs = messageService.getDialog(
+                getUserDetails().getId(), companion,
+                PageRequest.of(page,
+                        30,
+                        Sort.by(Sort.Direction.DESC, "date"))
+        );
 
         List<ResponseMessageDTO> messageDTOs = new ArrayList<>();
         for (MessageDAO message : messageDAOs
@@ -82,7 +88,7 @@ public class MessageController implements MessageApi {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    public UserDAO getUserDetails(){
+    public UserDAO getUserDetails() {
         return userService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 }

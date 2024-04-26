@@ -1,4 +1,4 @@
-package com.sosoburger.toaster;
+package com.sosoburger.toaster.state;
 
 public enum FriendStatusEnum {
     FRIEND,

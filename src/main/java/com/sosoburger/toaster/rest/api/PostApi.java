@@ -1,6 +1,6 @@
 package com.sosoburger.toaster.rest.api;
 
-import com.sosoburger.toaster.SortEnum;
+import com.sosoburger.toaster.state.SortEnum;
 import com.sosoburger.toaster.dto.rq.RequestCommentDTO;
 import com.sosoburger.toaster.dto.rq.RequestEditPost;
 import com.sosoburger.toaster.dto.rq.RequestPostDTO;

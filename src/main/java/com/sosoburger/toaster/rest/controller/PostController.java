@@ -1,6 +1,6 @@
 package com.sosoburger.toaster.rest.controller;
 
-import com.sosoburger.toaster.SortEnum;
+import com.sosoburger.toaster.state.SortEnum;
 import com.sosoburger.toaster.dao.PostDAO;
 import com.sosoburger.toaster.dao.UserDAO;
 import com.sosoburger.toaster.dto.rq.RequestCommentDTO;

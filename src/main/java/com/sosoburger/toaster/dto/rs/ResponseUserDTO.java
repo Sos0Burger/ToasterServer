@@ -1,6 +1,6 @@
 package com.sosoburger.toaster.dto.rs;
 
-import com.sosoburger.toaster.FriendStatusEnum;
+import com.sosoburger.toaster.state.FriendStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
