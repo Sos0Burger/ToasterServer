@@ -54,4 +54,7 @@ public class MessageDAO{
         return new ResponseMessageDTO(id, text, sender.toFriendDTO(), receiver.toFriendDTO(), date.getTime(), attachmentsDTO, read == null || read);
     }
 
+    public MessageDAO copy(){
+        return new MessageDAO(id, text, sender, receiver, date, read, attachments);
+    }
 }

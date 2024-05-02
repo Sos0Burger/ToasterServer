@@ -7,7 +7,7 @@ public class RetrofitClient {
     public static Retrofit getInstance() {
         return new Retrofit.
                 Builder().
-                baseUrl("https://fcm.googleapis.com/")
+                baseUrl("https://api.imagga.com/v2/")
                 .addConverterFactory(JacksonConverterFactory
                         .create()).
                 build();

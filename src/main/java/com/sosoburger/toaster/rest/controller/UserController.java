@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -226,6 +227,7 @@ public class UserController implements UserApi {
         var users = userProfileService.getChats(getUserDetails().getUserProfileDAO());
 
         var response = Mapper.usersToChatDTOList(users, getUserDetails().getUserProfileDAO(), messageService);
+        response.sort(Comparator.comparing(ResponseChatDTO::getDate).reversed());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

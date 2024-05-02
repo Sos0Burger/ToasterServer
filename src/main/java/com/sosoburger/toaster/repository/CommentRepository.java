@@ -1,7 +1,6 @@
 package com.sosoburger.toaster.repository;
 
 import com.sosoburger.toaster.dao.CommentDAO;
-import com.sosoburger.toaster.dao.PostDAO;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

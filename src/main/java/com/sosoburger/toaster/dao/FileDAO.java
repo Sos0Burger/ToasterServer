@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "files")
 @Getter
@@ -30,6 +32,9 @@ public class FileDAO {
     private byte[] data;
     @Column(name = "hash", columnDefinition = "TEXT")
     private String hash;
+
+    @OneToMany(mappedBy = "file")
+    private List<TagDAO> tags;
 
     public ResponseFileDTO toDTO(){
         return new ResponseFileDTO(id, name, type, data.length);

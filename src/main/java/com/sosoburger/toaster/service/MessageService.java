@@ -20,4 +20,6 @@ public interface MessageService {
     void delete(Integer id);
 
     MessageDAO get(Integer id);
+
+    MessageDAO read(Integer id);
 }

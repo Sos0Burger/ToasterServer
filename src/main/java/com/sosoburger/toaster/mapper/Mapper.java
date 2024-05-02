@@ -13,7 +13,7 @@ import java.util.List;
 public class Mapper {
     public static List<ResponseCommentDTO> commentsToDTOList(List<CommentDAO> comments, Integer userProfile){
         List<ResponseCommentDTO> response = new ArrayList<>();
-        comments.forEach(item->{response.add(item.toDTO(userProfile));});
+        comments.forEach(item-> response.add(item.toDTO(userProfile)));
         return response;
     }
     public static List<FriendDTO> friendsToDTOList(List<UserProfileDAO> userProfiles){

@@ -30,8 +30,6 @@ public class WebSocketHandler extends BinaryWebSocketHandler {
     private final MessageService messageService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private Integer count = 229;
-
     public WebSocketHandler(AuthenticationManager authenticationManager, UserServiceImpl userService, MessageService messageService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
@@ -57,15 +55,17 @@ public class WebSocketHandler extends BinaryWebSocketHandler {
     @Override
     protected void handleBinaryMessage(@NotNull WebSocketSession session, @NotNull BinaryMessage message) throws Exception {
         var messageDTO = objectMapper.readValue(message.getPayload().array(), ResponseWebsocketMessageDTO.class);
-        var response = objectMapper.writeValueAsBytes(messageDTO);
-        var sender = userSessions.get(messageDTO.getSender().getId());
+                var sender = userSessions.get(messageDTO.getSender().getId());
         var receiver = userSessions.get(messageDTO.getReceiver().getId());
-        if (sender!=null && sender.isOpen()) {
-            sender.sendMessage(new BinaryMessage(response));
-        }
         if (receiver!=null && receiver.isOpen()) {
-            receiver.sendMessage(new BinaryMessage(response));
+            messageService.read(messageDTO.getId());
+            messageDTO.setRead(true);
+            receiver.sendMessage(new BinaryMessage(objectMapper.writeValueAsBytes(messageDTO)));
         }
+        if (sender!=null && sender.isOpen()) {
+            sender.sendMessage(new BinaryMessage(objectMapper.writeValueAsBytes(messageDTO)));
+        }
+
 
     }
 
