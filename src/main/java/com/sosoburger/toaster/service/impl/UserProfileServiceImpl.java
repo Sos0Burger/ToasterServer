@@ -49,7 +49,6 @@ public class UserProfileServiceImpl implements UserProfileService {
                 null,
                 null,
                 null,
-                null,
                 userDAO,
                 new ArrayList<>(),
                 new ArrayList<>(),

@@ -52,16 +52,7 @@ public class PostServiceImpl implements PostService {
     public PostDAO createPost(RequestPostDTO postDTO, UserDAO user) {
         UserProfileDAO creator = user.getUserProfileDAO();
         List<FileDAO> attachments = new ArrayList<>(fileRepository.findAllById(postDTO.getAttachments()));
-
-        PostDAO post = postRepository.save(postDTO.toDAO(creator, attachments));
-
-        for (var item: creator.getFriends()
-             ) {
-            UserProfileDAO userProfileDAO = userProfileService.getUser(item);
-            userProfileDAO.getFeed().add(post);
-            userProfileRepository.save(userProfileDAO);
-        }
-        return post;
+        return postRepository.save(postDTO.toDAO(creator, attachments));
     }
 
     @Override

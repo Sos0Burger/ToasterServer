@@ -54,10 +54,6 @@ public class UserProfileDAO {
     @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
     private List<PostDAO> posts = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    private List<PostDAO> feed = new ArrayList<>();
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private UserDAO user;
