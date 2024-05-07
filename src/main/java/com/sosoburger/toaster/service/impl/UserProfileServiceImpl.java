@@ -95,7 +95,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @SneakyThrows
     @Override
-    public UserProfileDAO acceptFriendRequest(Integer senderid, Integer receiverid) {
+    public UserProfileDAO acceptFriendRequest(Integer receiverid, Integer senderid) {
         var sender = getUser(senderid);
         var receiver = getUser(receiverid);
         if (receiver.getPending().contains(senderid) && sender.getSent().contains(receiverid)) {
