@@ -22,10 +22,9 @@ public interface PostRepository extends JpaRepository<PostDAO, Integer> {
     List<PostDAO> getFriendFeed(@Param("friendIds") List<Integer> friendIds, @Param("query") String query, Pageable pageable);
     @Query("SELECT DISTINCT p " +
             "FROM PostDAO p " +
-            "JOIN p.attachments f " +
-            "JOIN f.tags t " +
-            "WHERE (LOWER(p.text) LIKE LOWER(concat('%', concat(:query, '%'))) " +
-            "OR LOWER(t.name) LIKE LOWER(concat('%', concat(:query, '%'))))"
+            "LEFT JOIN p.attachments f " +
+            "LEFT JOIN f.tags t " +
+            "WHERE LOWER(p.text) LIKE LOWER(concat('%', concat(:query, '%'))) "
     )
     List<PostDAO> getFeed(@Param("query")String query, Pageable pageable);
 }

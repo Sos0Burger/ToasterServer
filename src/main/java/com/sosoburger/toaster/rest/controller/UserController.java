@@ -170,7 +170,8 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<List<ResponsePostDTO>> getFeed(String query, Integer page) {
-        var response = Mapper.postsToDTOList(userProfileService.getFeed(query, page), getUserDetails().getUserProfileDAO());
+        var feed = userProfileService.getFeed(query, page);
+        var response = Mapper.postsToDTOList(feed, getUserDetails().getUserProfileDAO());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
